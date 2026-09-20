@@ -1,0 +1,440 @@
+/* ==========================================================================
+   Two Plates, One Table — meal pool data
+   Add a new meal any time by copying an existing object into MEALS below.
+   category: "breakfast" | "brunch" | "lunch" | "dinner"
+   Each ingredient: { text: "shown in the recipe", cat: shopping category, q: short Ocado search term }
+   Dinners carry hisAdd: { text, cat, q } for the partner's carb side.
+   ========================================================================== */
+
+const CATS = {
+  MEAT: "Meat, fish & eggs",
+  FRIDGE: "Fridge",
+  VEG: "Fruit & veg",
+  CUPBOARD: "Store cupboard",
+  HIS: "For his plate"
+};
+
+const MEALS = [
+  // ---------- BREAKFASTS ----------
+  {
+    id: "bf1", category: "breakfast", title: "Greek yogurt, berries & chia", kcal: 320, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "200g 0% or 2% Greek yogurt", cat: CATS.FRIDGE, q: "Greek yogurt" },
+      { text: "100g mixed berries (fresh or frozen, defrosted)", cat: CATS.VEG, q: "mixed berries" },
+      { text: "1 tbsp chia seeds", cat: CATS.CUPBOARD, q: "chia seeds" },
+      { text: "15g flaked almonds", cat: CATS.CUPBOARD, q: "flaked almonds" },
+      { text: "optional: 1/2 tsp cinnamon", cat: CATS.CUPBOARD, q: "ground cinnamon" }
+    ],
+    method: [
+      "Stir the chia seeds through the yogurt and leave 5 minutes to thicken slightly.",
+      "Top with the berries and almonds.",
+      "Dust with cinnamon if using."
+    ],
+    tip: "A few drops of vanilla extract or a curl of lemon zest makes this taste far less like a diet breakfast."
+  },
+  {
+    id: "bf2", category: "breakfast", title: "Veggie omelette with spinach & tomato", kcal: 310, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "2 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "handful spinach", cat: CATS.VEG, q: "spinach" },
+      { text: "1 small tomato, diced", cat: CATS.VEG, q: "tomato" },
+      { text: "2 tsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1 small orange or handful grapes, to finish", cat: CATS.VEG, q: "orange" }
+    ],
+    method: [
+      "Whisk the eggs with a pinch of salt and pepper.",
+      "Warm the oil in a small non-stick pan, wilt the spinach for 30 seconds, add the tomato.",
+      "Pour in the eggs, tilt the pan to cover the base, and cook gently until just set. Fold in half to serve.",
+      "Have the fruit alongside."
+    ],
+    tip: "A pinch of dried oregano in the egg mix and a few shavings of hard cheese (for you) turn this Mediterranean instead of plain."
+  },
+  {
+    id: "bf3", category: "breakfast", title: "Gluten-free overnight oats with berries", kcal: 315, batch: "batch", gf: true,
+    ingredients: [
+      { text: "45g certified gluten-free oats", cat: CATS.CUPBOARD, q: "gluten free oats" },
+      { text: "150ml semi-skimmed milk (or a milk of your choice)", cat: CATS.FRIDGE, q: "semi skimmed milk" },
+      { text: "100g mixed berries", cat: CATS.VEG, q: "mixed berries" },
+      { text: "1 tsp honey", cat: CATS.CUPBOARD, q: "honey" },
+      { text: "1/2 tsp cinnamon", cat: CATS.CUPBOARD, q: "ground cinnamon" }
+    ],
+    method: [
+      "The night before, stir the oats, milk and cinnamon together in a jar or bowl.",
+      "Cover and refrigerate overnight.",
+      "In the morning, top with berries and a drizzle of honey."
+    ],
+    tip: "Make three or four jars at once on a Sunday — they keep well for up to 4 days and mean zero effort on weekday mornings."
+  },
+  {
+    id: "bf4", category: "breakfast", title: "Cottage cheese with fruit & walnuts", kcal: 310, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "200g cottage cheese", cat: CATS.FRIDGE, q: "cottage cheese" },
+      { text: "120g peach, pineapple or nectarine, sliced", cat: CATS.VEG, q: "peach" },
+      { text: "12g walnuts, roughly chopped", cat: CATS.CUPBOARD, q: "walnuts" },
+      { text: "1 tsp honey", cat: CATS.CUPBOARD, q: "honey" }
+    ],
+    method: [
+      "Spoon the cottage cheese into a bowl.",
+      "Top with the fruit and walnuts.",
+      "Finish with a thin drizzle of honey."
+    ],
+    tip: "A little lemon zest and cracked black pepper over the cottage cheese is an unexpectedly good, savoury-leaning twist."
+  },
+
+  // ---------- BRUNCHES ----------
+  {
+    id: "br1", category: "brunch", title: "Eggs, baked beans & grilled tomato", kcal: 730, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "2 eggs, fried or poached", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "250g reduced-sugar, reduced-salt baked beans (check label — most major brands are gluten-free, but confirm)", cat: CATS.CUPBOARD, q: "reduced sugar baked beans" },
+      { text: "1 large tomato, halved and grilled", cat: CATS.VEG, q: "tomato" },
+      { text: "handful spinach, wilted", cat: CATS.VEG, q: "spinach" },
+      { text: "2 slices gluten-free bread, toasted", cat: CATS.CUPBOARD, q: "gluten free bread" },
+      { text: "1 tsp butter", cat: CATS.FRIDGE, q: "butter" },
+      { text: "1/4 avocado, sliced", cat: CATS.VEG, q: "avocado" }
+    ],
+    method: [
+      "Warm the beans in a small pan while you grill the tomato halves and toast the bread.",
+      "Wilt the spinach in the same pan you'll fry the eggs in, then push aside and fry or poach the eggs.",
+      "Butter the toast and plate everything together with the avocado."
+    ],
+    tip: "A few shakes of Worcestershire-style sauce (check GF) or a swirl of chilli oil on the side — not mixed through your beans if you want to keep them mild — lifts this a lot."
+  },
+  {
+    id: "br2", category: "brunch", title: "Smoked salmon, poached egg & avocado", kcal: 750, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "100g smoked salmon", cat: CATS.MEAT, q: "smoked salmon" },
+      { text: "2 eggs, poached", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "1/2 avocado, mashed with lemon and black pepper", cat: CATS.VEG, q: "avocado" },
+      { text: "2–3 slices gluten-free bread or sourdough-style GF loaf, toasted", cat: CATS.CUPBOARD, q: "gluten free bread" },
+      { text: "1 tsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "small handful rocket, dressed with lemon", cat: CATS.VEG, q: "rocket salad" }
+    ],
+    method: [
+      "Toast the bread and spread with the mashed avocado.",
+      "Poach the eggs (a splash of vinegar in just-simmering water helps them hold together).",
+      "Layer the smoked salmon over the avocado toast, top with the poached eggs, and serve the dressed rocket alongside."
+    ],
+    tip: "A scattering of fresh dill makes this taste like a weekend hotel brunch rather than a meal-prep plate."
+  },
+  {
+    id: "br3", category: "brunch", title: "Mediterranean baked eggs (mild)", kcal: 720, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "2 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "250g passata or chopped tomatoes", cat: CATS.CUPBOARD, q: "passata" },
+      { text: "1/2 courgette, diced", cat: CATS.VEG, q: "courgette" },
+      { text: "1/4 onion, sliced", cat: CATS.VEG, q: "onion" },
+      { text: "1 garlic clove, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "1/2 tsp mild smoked paprika (not hot)", cat: CATS.CUPBOARD, q: "smoked paprika" },
+      { text: "1/2 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
+      { text: "30g feta, crumbled", cat: CATS.FRIDGE, q: "feta cheese" },
+      { text: "3 slices gluten-free crusty bread", cat: CATS.CUPBOARD, q: "gluten free bread" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" }
+    ],
+    method: [
+      "Soften the onion and courgette in the olive oil for 5–6 minutes. Add the garlic, paprika and oregano and cook 1 minute more.",
+      "Pour in the passata, season, and simmer 5 minutes until slightly thickened.",
+      "Make two wells in the sauce, crack in the eggs, cover, and cook gently until the whites are set but yolks still soft (5–7 minutes).",
+      "Scatter with feta and serve with the toasted GF bread for scooping."
+    ],
+    tip: "This is a shakshuka built mild on purpose — keep a small jar of chilli flakes on the table so anyone who wants heat can add their own."
+  },
+  {
+    id: "br4", category: "brunch", title: "Turkish-style breakfast plate", kcal: 720, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "2 eggs, soft-boiled or fried", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "40g feta, sliced", cat: CATS.FRIDGE, q: "feta cheese" },
+      { text: "1/2 cucumber, sliced", cat: CATS.VEG, q: "cucumber" },
+      { text: "1 tomato, wedged", cat: CATS.VEG, q: "tomato" },
+      { text: "6 Kalamata olives", cat: CATS.CUPBOARD, q: "kalamata olives" },
+      { text: "3 slices gluten-free bread", cat: CATS.CUPBOARD, q: "gluten free bread" },
+      { text: "15g walnuts", cat: CATS.CUPBOARD, q: "walnuts" },
+      { text: "1 tsp honey", cat: CATS.CUPBOARD, q: "honey" },
+      { text: "1 tsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" }
+    ],
+    method: [
+      "Soft-boil the eggs for 6–7 minutes, or fry them if you prefer.",
+      "Arrange the feta, cucumber, tomato and olives on a plate — this is a spread, not a cooked dish.",
+      "Toast the bread, drizzle with olive oil, and serve the walnuts and honey alongside for dipping."
+    ],
+    tip: "Good olive oil and flaky salt do most of the work here — don't skimp on either."
+  },
+
+  // ---------- LUNCHES ----------
+  {
+    id: "l1", category: "lunch", title: "Baked lemon salmon, sweet potato & greens", kcal: 450, batch: "batch", gf: true,
+    ingredients: [
+      { text: "130g salmon fillet", cat: CATS.MEAT, q: "salmon fillet" },
+      { text: "160g sweet potato, cut into small cubes", cat: CATS.VEG, q: "sweet potato" },
+      { text: "100g tenderstem broccoli or green beans", cat: CATS.VEG, q: "tenderstem broccoli" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1/2 lemon, juiced and zested", cat: CATS.VEG, q: "lemon" },
+      { text: "1 tsp dried dill (or fresh if you have it)", cat: CATS.CUPBOARD, q: "dried dill" },
+      { text: "2 tbsp natural yogurt, mixed with a little lemon and dill, to serve", cat: CATS.FRIDGE, q: "natural yogurt" }
+    ],
+    method: [
+      "Heat the oven to 200°C (fan 180°C). Toss the sweet potato cubes in half the oil, season, and roast 20 minutes.",
+      "Add the salmon fillet and broccoli to the tray, drizzle with the remaining oil and lemon juice, and roast a further 12–14 minutes until the salmon flakes easily.",
+      "Serve with the lemon zest scattered over and the dill yogurt on the side."
+    ],
+    tip: "The one non-negotiable of the plan — this is the salmon-and-sweet-potato lunch. Roast a double batch and split it across two lunches; the sweet potato reheats better than you'd expect."
+  },
+  {
+    id: "l2", category: "lunch", title: "Greek-style chicken & chickpea salad", kcal: 470, batch: "batch", gf: true,
+    ingredients: [
+      { text: "120g chicken breast", cat: CATS.MEAT, q: "chicken breast" },
+      { text: "1 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
+      { text: "1/2 lemon, juiced", cat: CATS.VEG, q: "lemon" },
+      { text: "1/2 cucumber, diced", cat: CATS.VEG, q: "cucumber" },
+      { text: "1 tomato, diced", cat: CATS.VEG, q: "tomato" },
+      { text: "1/4 red onion, thinly sliced", cat: CATS.VEG, q: "red onion" },
+      { text: "40g chickpeas, drained", cat: CATS.CUPBOARD, q: "chickpeas" },
+      { text: "6 Kalamata olives", cat: CATS.CUPBOARD, q: "kalamata olives" },
+      { text: "25g feta, crumbled", cat: CATS.FRIDGE, q: "feta cheese" },
+      { text: "2 tsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" }
+    ],
+    method: [
+      "Marinate the chicken in half the lemon juice, the oregano, a little salt and 1 tsp of the oil for at least 15 minutes (longer if you have time).",
+      "Griddle or pan-fry the chicken 5–6 minutes each side until cooked through, then slice.",
+      "Toss the cucumber, tomato, onion, chickpeas and olives with the remaining lemon juice and oil.",
+      "Top the salad with the sliced chicken and crumbled feta."
+    ],
+    tip: "Grill 3–4 chicken breasts at once and keep them sliced in the fridge — this salad comes together in under 10 minutes when the chicken's already done."
+  },
+  {
+    id: "l3", category: "lunch", title: "Tuna & white bean salad", kcal: 430, batch: "batch", gf: true,
+    ingredients: [
+      { text: "145g tin tuna in spring water, drained", cat: CATS.CUPBOARD, q: "tuna in spring water" },
+      { text: "120g cannellini beans, drained and rinsed", cat: CATS.CUPBOARD, q: "cannellini beans" },
+      { text: "40g jarred artichoke hearts, roughly chopped", cat: CATS.CUPBOARD, q: "artichoke hearts" },
+      { text: "6 cherry tomatoes, halved", cat: CATS.VEG, q: "cherry tomatoes" },
+      { text: "1/4 cucumber, diced", cat: CATS.VEG, q: "cucumber" },
+      { text: "6 Kalamata olives, halved", cat: CATS.CUPBOARD, q: "kalamata olives" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1 tsp red wine vinegar", cat: CATS.CUPBOARD, q: "red wine vinegar" },
+      { text: "small handful fresh parsley, chopped", cat: CATS.VEG, q: "fresh parsley" }
+    ],
+    method: [
+      "Flake the tuna into a bowl with the beans, artichoke hearts, tomatoes and cucumber.",
+      "Whisk the oil and vinegar together and toss through with the olives.",
+      "Finish with the parsley."
+    ],
+    tip: "This one needs no cooking at all — make two portions in one go and it keeps in the fridge for up to 3 days, so it's the easiest lunch on the whole plan."
+  },
+  {
+    id: "l4", category: "lunch", title: "Mediterranean spinach & feta frittata", kcal: 455, batch: "batch", gf: true,
+    ingredients: [
+      { text: "3 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "handful spinach, roughly chopped", cat: CATS.VEG, q: "spinach" },
+      { text: "20g sun-dried tomatoes, chopped", cat: CATS.CUPBOARD, q: "sun-dried tomatoes" },
+      { text: "25g feta, crumbled", cat: CATS.FRIDGE, q: "feta cheese" },
+      { text: "1 tsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "30g chickpeas, for the side salad", cat: CATS.CUPBOARD, q: "chickpeas" },
+      { text: "small handful mixed leaves, dressed with 1 tsp olive oil and lemon", cat: CATS.VEG, q: "mixed salad leaves" }
+    ],
+    method: [
+      "Heat the oil in a small oven-proof pan. Wilt the spinach, then stir in the sun-dried tomatoes.",
+      "Whisk the eggs with a little seasoning, pour into the pan and scatter over the feta.",
+      "Cook gently on the hob for 2–3 minutes until the edges set, then finish under the grill for 3–4 minutes until just set through.",
+      "Serve warm or cold with the dressed leaves and chickpeas alongside."
+    ],
+    tip: "Frittata is one of the few things here that's genuinely as good cold from the fridge the next day — worth doubling even though it's not on the repeat schedule."
+  },
+
+  // ---------- DINNERS (shared) ----------
+  {
+    id: "d1", category: "dinner", title: "Steak, garlic butter mushrooms & broccoli", kcal: 535, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "180g lean sirloin or rump steak", cat: CATS.MEAT, q: "sirloin steak" },
+      { text: "150g chestnut mushrooms, sliced", cat: CATS.VEG, q: "chestnut mushrooms" },
+      { text: "150g broccoli or tenderstem", cat: CATS.VEG, q: "broccoli" },
+      { text: "1.5 tsp butter", cat: CATS.FRIDGE, q: "butter" },
+      { text: "1 garlic clove, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "1 tsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "fresh thyme or parsley, to finish", cat: CATS.VEG, q: "fresh thyme" }
+    ],
+    hisAdd: { text: "250g baby potatoes, boiled and tossed in a little butter — or 150g sweet potato wedges, roasted.", cat: CATS.HIS, q: "baby potatoes" },
+    method: [
+      "Take the steak out of the fridge 20 minutes before cooking so it comes to room temperature.",
+      "Steam or boil the broccoli until just tender, 4–5 minutes.",
+      "Get a pan very hot with the olive oil. Season the steak well and sear 2–3 minutes each side for medium-rare (longer for your preference), then rest for 5 minutes under foil.",
+      "In the same pan, melt the butter, add the mushrooms and garlic, and cook 4–5 minutes until golden.",
+      "Slice the steak, plate with the mushrooms, broccoli and any resting juices spooned over."
+    ],
+    tip: "A cracked-pepper-and-Dijon mustard sauce (mustard, a splash of the steak's resting juices, black pepper) makes this taste like a restaurant dish — check your mustard brand is gluten-free."
+  },
+  {
+    id: "d2", category: "dinner", title: "Mediterranean baked chicken thighs", kcal: 500, batch: "batch", gf: true,
+    ingredients: [
+      { text: "2 boneless, skinless chicken thighs (about 170g)", cat: CATS.MEAT, q: "chicken thighs" },
+      { text: "6 Kalamata olives", cat: CATS.CUPBOARD, q: "kalamata olives" },
+      { text: "100g cherry tomatoes", cat: CATS.VEG, q: "cherry tomatoes" },
+      { text: "150g courgette, sliced", cat: CATS.VEG, q: "courgette" },
+      { text: "20g feta, crumbled (leave off his portion)", cat: CATS.FRIDGE, q: "feta cheese" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
+      { text: "1/2 lemon, juiced", cat: CATS.VEG, q: "lemon" }
+    ],
+    hisAdd: { text: "150g cooked rice or gluten-containing couscous, or a gluten-free orzo if you'd rather cook one grain for the table.", cat: CATS.HIS, q: "basmati rice" },
+    method: [
+      "Heat the oven to 200°C (fan 180°C). Toss the courgette and tomatoes with half the oil, the oregano and seasoning in a roasting dish.",
+      "Nestle the chicken thighs among the vegetables, drizzle with the remaining oil and lemon juice, and scatter the olives over.",
+      "Roast 25–30 minutes until the chicken is cooked through and the vegetables are soft and a little caramelised.",
+      "Scatter feta over your portion only just before serving."
+    ],
+    tip: "This is a genuinely good batch dish — it freezes well, so cook the full amount now and freeze half flat in a bag for the week-2 repeat."
+  },
+  {
+    id: "d3", category: "dinner", title: "Pan-seared cod with Mediterranean roasted vegetables", kcal: 515, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "220g cod loin (or another firm white fish)", cat: CATS.MEAT, q: "cod loin" },
+      { text: "100g cherry tomatoes, halved", cat: CATS.VEG, q: "cherry tomatoes" },
+      { text: "1/2 courgette, sliced", cat: CATS.VEG, q: "courgette" },
+      { text: "1/4 red onion, wedged", cat: CATS.VEG, q: "red onion" },
+      { text: "1.5 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1 tsp dried thyme", cat: CATS.CUPBOARD, q: "dried thyme" },
+      { text: "small handful rocket or mixed leaves", cat: CATS.VEG, q: "rocket salad" },
+      { text: "1 tsp red wine vinegar", cat: CATS.CUPBOARD, q: "red wine vinegar" }
+    ],
+    hisAdd: { text: "200g new or crushed potatoes with butter.", cat: CATS.HIS, q: "new potatoes" },
+    method: [
+      "Heat the oven to 200°C (fan 180°C). Toss the tomatoes, courgette and onion with 1 tbsp of the oil and the thyme, and roast 20 minutes.",
+      "Pat the cod dry and season. Heat the remaining oil in a pan and sear the cod 3 minutes skin-side (or presentation-side) down, then flip and cook 2–3 minutes more until just opaque through.",
+      "Dress the leaves with the vinegar and a little oil.",
+      "Plate the roasted vegetables, top with the cod, and serve the dressed leaves alongside."
+    ],
+    tip: "Fish doesn't reheat well, so cook this fresh both times rather than batching it — but you can chop and prep the vegetables a day ahead to save time."
+  },
+  {
+    id: "d4", category: "dinner", title: "Turkey meatballs in tomato-basil sauce with courgetti", kcal: 540, batch: "batch", gf: true,
+    ingredients: [
+      { text: "180g turkey mince", cat: CATS.MEAT, q: "turkey mince" },
+      { text: "1 garlic clove, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "1 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
+      { text: "1 tbsp gluten-free breadcrumbs or ground almonds, to bind", cat: CATS.CUPBOARD, q: "gluten free breadcrumbs" },
+      { text: "1 egg, beaten (use a small amount to bind)", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "150g passata", cat: CATS.CUPBOARD, q: "passata" },
+      { text: "fresh basil", cat: CATS.VEG, q: "fresh basil" },
+      { text: "200g courgette, spiralised or ribboned", cat: CATS.VEG, q: "courgette" },
+      { text: "15g toasted pine nuts", cat: CATS.CUPBOARD, q: "pine nuts" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" }
+    ],
+    hisAdd: { text: "100g gluten-containing spaghetti, or a shared gluten-free pasta if you'd rather cook one pot for the table.", cat: CATS.HIS, q: "spaghetti" },
+    method: [
+      "Mix the turkey mince with the garlic, oregano, breadcrumbs and just enough beaten egg to bind. Roll into 6–8 meatballs.",
+      "Brown the meatballs in the olive oil for 4–5 minutes, turning, until coloured all over.",
+      "Pour in the passata, cover, and simmer 12–15 minutes until the meatballs are cooked through.",
+      "Warm the courgetti through in the sauce for the final minute, or serve it raw underneath if you prefer more bite.",
+      "Scatter with basil and pine nuts."
+    ],
+    tip: "Double the meatballs and freeze half in their sauce — they reheat better than almost anything else on this plan."
+  },
+  {
+    id: "d5", category: "dinner", title: "Greek-style beef koftas with tzatziki", kcal: 525, batch: "batch", gf: true,
+    ingredients: [
+      { text: "170g lean (5%) beef mince", cat: CATS.MEAT, q: "lean beef mince 5%" },
+      { text: "1/2 tsp ground cumin", cat: CATS.CUPBOARD, q: "ground cumin" },
+      { text: "1 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
+      { text: "1 garlic clove, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "1/4 red onion, finely diced", cat: CATS.VEG, q: "red onion" },
+      { text: "1/2 cucumber, diced", cat: CATS.VEG, q: "cucumber" },
+      { text: "1 tomato, diced", cat: CATS.VEG, q: "tomato" },
+      { text: "6 Kalamata olives", cat: CATS.CUPBOARD, q: "kalamata olives" },
+      { text: "30g feta, crumbled", cat: CATS.FRIDGE, q: "feta cheese" },
+      { text: "2 tbsp Greek yogurt tzatziki (yogurt, grated cucumber, garlic, mint)", cat: CATS.FRIDGE, q: "greek yogurt" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" }
+    ],
+    hisAdd: { text: "warm gluten-containing pitta or rice, plus a dairy-free swap for the tzatziki — a squeeze of lemon and extra olive oil over his koftas works well since yogurt is off the table for him.", cat: CATS.HIS, q: "pitta bread" },
+    method: [
+      "Mix the mince with the cumin, oregano, garlic and a good pinch of salt. Shape into 4–6 oval koftas.",
+      "Griddle or pan-fry 3–4 minutes each side until cooked through and nicely charred.",
+      "Toss the cucumber, tomato and olives with the olive oil for a quick Greek salad, and crumble the feta over your portion.",
+      "Serve the koftas with the salad and tzatziki on the side (yours only)."
+    ],
+    tip: "Form and freeze the raw koftas in a single layer, then cook straight from frozen (a few extra minutes) for a later repeat — no need to defrost first."
+  },
+  {
+    id: "d6", category: "dinner", title: "Garlic prawn & tomato skillet with courgette noodles", kcal: 520, batch: "fresh", gf: true,
+    ingredients: [
+      { text: "280g raw king prawns", cat: CATS.MEAT, q: "raw king prawns" },
+      { text: "2 garlic cloves, sliced", cat: CATS.VEG, q: "garlic" },
+      { text: "150g cherry tomatoes, halved", cat: CATS.VEG, q: "cherry tomatoes" },
+      { text: "1/2 lemon, juiced", cat: CATS.VEG, q: "lemon" },
+      { text: "6 Kalamata olives", cat: CATS.CUPBOARD, q: "kalamata olives" },
+      { text: "150g courgette, spiralised", cat: CATS.VEG, q: "courgette" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "chilli flakes, on the side only", cat: CATS.CUPBOARD, q: "chilli flakes" },
+      { text: "fresh parsley", cat: CATS.VEG, q: "fresh parsley" }
+    ],
+    hisAdd: { text: "80–100g gluten-free or regular pasta tossed through the same sauce.", cat: CATS.HIS, q: "pasta" },
+    method: [
+      "Heat the oil in a large pan and gently cook the garlic for 30 seconds — don't let it brown.",
+      "Add the tomatoes and olives and cook 3–4 minutes until the tomatoes start to break down.",
+      "Add the prawns and cook 2–3 minutes until pink and just cooked through — they turn rubbery fast, so don't overcook.",
+      "Toss the courgette noodles through the pan for the final minute just to warm and soften slightly, then squeeze over the lemon juice.",
+      "Finish with parsley, and put chilli flakes on the table rather than in the pan."
+    ],
+    tip: "This is a 15-minute dish start to finish — no need to batch it, just cook it fresh both times."
+  },
+  {
+    id: "d7", category: "dinner", title: "Herb & lemon roast chicken with ratatouille", kcal: 505, batch: "batch", gf: true,
+    ingredients: [
+      { text: "220g chicken breast", cat: CATS.MEAT, q: "chicken breast" },
+      { text: "1/2 lemon, juiced and zested", cat: CATS.VEG, q: "lemon" },
+      { text: "1 tsp dried thyme", cat: CATS.CUPBOARD, q: "dried thyme" },
+      { text: "1 aubergine, diced", cat: CATS.VEG, q: "aubergine" },
+      { text: "1 courgette, diced", cat: CATS.VEG, q: "courgette" },
+      { text: "1 carrot, diced", cat: CATS.VEG, q: "carrot" },
+      { text: "1/2 onion, diced", cat: CATS.VEG, q: "onion" },
+      { text: "1 garlic clove, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "150g chopped tomatoes", cat: CATS.CUPBOARD, q: "chopped tomatoes" },
+      { text: "1.5 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "100g green beans", cat: CATS.VEG, q: "green beans" }
+    ],
+    hisAdd: { text: "180g roasted sweet potato wedges.", cat: CATS.HIS, q: "sweet potato" },
+    method: [
+      "For the ratatouille: soften the onion, carrot and aubergine in 1 tbsp of the oil for 8–10 minutes. Add the courgette and garlic and cook 3–4 minutes more.",
+      "Stir in the chopped tomatoes and simmer 15 minutes until thick and glossy.",
+      "Meanwhile, marinate the chicken in the lemon juice and zest, thyme, remaining oil and seasoning for at least 15 minutes.",
+      "Pan-fry or grill the chicken 6–7 minutes each side until cooked through, and steam the green beans.",
+      "Serve the chicken over the ratatouille with the green beans alongside."
+    ],
+    tip: "Ratatouille genuinely improves after a day in the fridge — make the full batch and a later repeat will taste even better than the first."
+  }
+];
+
+// Default 14-day rotation — every meal slot can be swapped from the picker,
+// this is just the starting point.
+const DEFAULT_PLAN = [
+  { n: 1,  week: 1, weekday: "Monday",    slots: [{ k: "brunch", id: "br1" }, { k: "dinner", id: "d1" }] },
+  { n: 2,  week: 1, weekday: "Tuesday",   slots: [{ k: "breakfast", id: "bf1" }, { k: "lunch", id: "l1" }, { k: "dinner", id: "d2" }] },
+  { n: 3,  week: 1, weekday: "Wednesday", slots: [{ k: "brunch", id: "br2" }, { k: "dinner", id: "d3" }] },
+  { n: 4,  week: 1, weekday: "Thursday",  slots: [{ k: "breakfast", id: "bf2" }, { k: "lunch", id: "l2" }, { k: "dinner", id: "d4" }] },
+  { n: 5,  week: 1, weekday: "Friday",    slots: [{ k: "brunch", id: "br3" }, { k: "dinner", id: "d5" }] },
+  { n: 6,  week: 1, weekday: "Saturday",  slots: [{ k: "breakfast", id: "bf3" }, { k: "lunch", id: "l3" }, { k: "dinner", id: "d6" }] },
+  { n: 7,  week: 1, weekday: "Sunday",    slots: [{ k: "brunch", id: "br4" }, { k: "dinner", id: "d7" }] },
+  { n: 8,  week: 2, weekday: "Monday",    slots: [{ k: "breakfast", id: "bf4" }, { k: "lunch", id: "l4" }, { k: "dinner", id: "d1" }] },
+  { n: 9,  week: 2, weekday: "Tuesday",   slots: [{ k: "brunch", id: "br1" }, { k: "dinner", id: "d2" }] },
+  { n: 10, week: 2, weekday: "Wednesday", slots: [{ k: "breakfast", id: "bf1" }, { k: "lunch", id: "l1" }, { k: "dinner", id: "d3" }] },
+  { n: 11, week: 2, weekday: "Thursday",  slots: [{ k: "brunch", id: "br2" }, { k: "dinner", id: "d4" }] },
+  { n: 12, week: 2, weekday: "Friday",    slots: [{ k: "breakfast", id: "bf2" }, { k: "lunch", id: "l2" }, { k: "dinner", id: "d5" }] },
+  { n: 13, week: 2, weekday: "Saturday",  slots: [{ k: "brunch", id: "br3" }, { k: "dinner", id: "d6" }] },
+  { n: 14, week: 2, weekday: "Sunday",    slots: [{ k: "breakfast", id: "bf3" }, { k: "lunch", id: "l3" }, { k: "dinner", id: "d7" }] }
+];
+
+const PANTRY = [
+  { name: "Extra virgin olive oil", note: "the backbone of almost every recipe here — use a good one for finishing, a cheaper one for cooking.", q: "extra virgin olive oil" },
+  { name: "Garlic & lemons", note: "buy more than you think — both feature constantly.", q: "garlic" },
+  { name: "Dried oregano, thyme & mild smoked paprika", note: "the core Mediterranean flavour trio; none of them bring heat.", q: "dried oregano" },
+  { name: "Fresh parsley, dill & basil", note: "whichever you can get fresh lifts a dish enormously — dried is a fine backup.", q: "fresh parsley" },
+  { name: "Kalamata olives & artichoke hearts", note: "briny, savoury, and do a lot of work for very few calories — a capers-free way to get that same Mediterranean lift.", q: "kalamata olives" },
+  { name: "Sun-dried tomatoes (in oil)", note: "a spoonful adds concentrated flavour to eggs, frittata or a salad.", q: "sun-dried tomatoes" },
+  { name: "Red wine vinegar & balsamic vinegar", note: "both naturally gluten-free — good for quick dressings.", q: "balsamic vinegar" },
+  { name: "Gluten-free Dijon mustard", note: "most are gluten-free but brands vary — check the label; great in a pan sauce for steak.", q: "dijon mustard" },
+  { name: "Tahini", note: "thin with lemon and water for an instant Mediterranean drizzle sauce over almost anything.", q: "tahini" },
+  { name: "Chilli flakes, kept separate", note: "so your partner can add heat to his own plate without any dish being spicy for you.", q: "chilli flakes" },
+  { name: "Gluten-free stock cubes or bouillon", note: "some standard stock cubes contain barley — look for a certified gluten-free one.", q: "gluten free stock cubes" },
+  { name: "Flaky sea salt & cracked black pepper", note: "season at the end as well as during cooking — it makes a bigger difference than any single condiment.", q: "flaky sea salt" }
+];
+
+const SLOT_LABELS = { breakfast: "Breakfast", brunch: "Brunch", lunch: "Lunch", dinner: "Dinner" };
