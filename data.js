@@ -526,22 +526,25 @@ const MEALS = [
 ];
 
 // Default 14-day rotation — every meal slot can be swapped from the picker,
-// this is just the starting point.
+// this is just the starting point. Every day gets all three of breakfast,
+// lunch and dinner (breakfast/lunch cycle through the 4 options each, dinner
+// cycles through the 7 dinners) — brunch dishes still live in the pool if
+// you want to swap one in for breakfast+lunch some day via "Choose meal".
 const DEFAULT_PLAN = [
-  { n: 1,  week: 1, weekday: "Monday",    slots: [{ k: "brunch", id: "br1" }, { k: "dinner", id: "d1" }] },
-  { n: 2,  week: 1, weekday: "Tuesday",   slots: [{ k: "breakfast", id: "bf1" }, { k: "lunch", id: "l1" }, { k: "dinner", id: "d2" }] },
-  { n: 3,  week: 1, weekday: "Wednesday", slots: [{ k: "brunch", id: "br2" }, { k: "dinner", id: "d3" }] },
-  { n: 4,  week: 1, weekday: "Thursday",  slots: [{ k: "breakfast", id: "bf2" }, { k: "lunch", id: "l2" }, { k: "dinner", id: "d4" }] },
-  { n: 5,  week: 1, weekday: "Friday",    slots: [{ k: "brunch", id: "br3" }, { k: "dinner", id: "d5" }] },
-  { n: 6,  week: 1, weekday: "Saturday",  slots: [{ k: "breakfast", id: "bf3" }, { k: "lunch", id: "l3" }, { k: "dinner", id: "d6" }] },
-  { n: 7,  week: 1, weekday: "Sunday",    slots: [{ k: "brunch", id: "br4" }, { k: "dinner", id: "d7" }] },
+  { n: 1,  week: 1, weekday: "Monday",    slots: [{ k: "breakfast", id: "bf1" }, { k: "lunch", id: "l1" }, { k: "dinner", id: "d1" }] },
+  { n: 2,  week: 1, weekday: "Tuesday",   slots: [{ k: "breakfast", id: "bf2" }, { k: "lunch", id: "l2" }, { k: "dinner", id: "d2" }] },
+  { n: 3,  week: 1, weekday: "Wednesday", slots: [{ k: "breakfast", id: "bf3" }, { k: "lunch", id: "l3" }, { k: "dinner", id: "d3" }] },
+  { n: 4,  week: 1, weekday: "Thursday",  slots: [{ k: "breakfast", id: "bf4" }, { k: "lunch", id: "l4" }, { k: "dinner", id: "d4" }] },
+  { n: 5,  week: 1, weekday: "Friday",    slots: [{ k: "breakfast", id: "bf1" }, { k: "lunch", id: "l1" }, { k: "dinner", id: "d5" }] },
+  { n: 6,  week: 1, weekday: "Saturday",  slots: [{ k: "breakfast", id: "bf2" }, { k: "lunch", id: "l2" }, { k: "dinner", id: "d6" }] },
+  { n: 7,  week: 1, weekday: "Sunday",    slots: [{ k: "breakfast", id: "bf3" }, { k: "lunch", id: "l3" }, { k: "dinner", id: "d7" }] },
   { n: 8,  week: 2, weekday: "Monday",    slots: [{ k: "breakfast", id: "bf4" }, { k: "lunch", id: "l4" }, { k: "dinner", id: "d1" }] },
-  { n: 9,  week: 2, weekday: "Tuesday",   slots: [{ k: "brunch", id: "br1" }, { k: "dinner", id: "d2" }] },
-  { n: 10, week: 2, weekday: "Wednesday", slots: [{ k: "breakfast", id: "bf1" }, { k: "lunch", id: "l1" }, { k: "dinner", id: "d3" }] },
-  { n: 11, week: 2, weekday: "Thursday",  slots: [{ k: "brunch", id: "br2" }, { k: "dinner", id: "d4" }] },
-  { n: 12, week: 2, weekday: "Friday",    slots: [{ k: "breakfast", id: "bf2" }, { k: "lunch", id: "l2" }, { k: "dinner", id: "d5" }] },
-  { n: 13, week: 2, weekday: "Saturday",  slots: [{ k: "brunch", id: "br3" }, { k: "dinner", id: "d6" }] },
-  { n: 14, week: 2, weekday: "Sunday",    slots: [{ k: "breakfast", id: "bf3" }, { k: "lunch", id: "l3" }, { k: "dinner", id: "d7" }] }
+  { n: 9,  week: 2, weekday: "Tuesday",   slots: [{ k: "breakfast", id: "bf1" }, { k: "lunch", id: "l1" }, { k: "dinner", id: "d2" }] },
+  { n: 10, week: 2, weekday: "Wednesday", slots: [{ k: "breakfast", id: "bf2" }, { k: "lunch", id: "l2" }, { k: "dinner", id: "d3" }] },
+  { n: 11, week: 2, weekday: "Thursday",  slots: [{ k: "breakfast", id: "bf3" }, { k: "lunch", id: "l3" }, { k: "dinner", id: "d4" }] },
+  { n: 12, week: 2, weekday: "Friday",    slots: [{ k: "breakfast", id: "bf4" }, { k: "lunch", id: "l4" }, { k: "dinner", id: "d5" }] },
+  { n: 13, week: 2, weekday: "Saturday",  slots: [{ k: "breakfast", id: "bf1" }, { k: "lunch", id: "l1" }, { k: "dinner", id: "d6" }] },
+  { n: 14, week: 2, weekday: "Sunday",    slots: [{ k: "breakfast", id: "bf2" }, { k: "lunch", id: "l2" }, { k: "dinner", id: "d7" }] }
 ];
 
 const PANTRY = [
