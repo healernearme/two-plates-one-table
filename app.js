@@ -15,6 +15,9 @@ const MEALS_BY_ID = mealsById();
 function mealsOfCategory(cat) {
   return MEALS.filter(m => m.category === cat);
 }
+function uniqueFacet(list, key) {
+  return Array.from(new Set(list.map(m => m[key]))).sort();
+}
 
 /* ---------------------------------------------------------
    STATE
@@ -60,8 +63,6 @@ function renderPlan() {
         const meal = MEALS_BY_ID[mealId];
         const checkKey = `meal:${day.n}:${s.k}`;
         const on = isOn(checkKey);
-        const selectId = `sel-${day.n}-${s.k}`;
-        const options = mealsOfCategory(s.k).map(m => `<option value="${m.id}" ${m.id === mealId ? "selected" : ""}>${m.title} (~${m.kcal} kcal)</option>`).join("");
         html += `<div class="slot ${on ? "done" : ""}">
           <div class="check ${on ? "on" : ""}" data-key="${checkKey}" onclick="toggleCheck('${checkKey}')"></div>
           <div class="slot-body">
@@ -70,12 +71,12 @@ function renderPlan() {
                 <span class="slot-tag">${SLOT_LABELS[s.k]}</span><br>
                 <div class="slot-name-row">
                   <span class="slot-name"><a href="#r-${mealId}" onclick="goRecipe(event,'${mealId}')">${meal.title}</a></span>
-                  <button class="swap-btn" onclick="toggleSwap('${selectId}')">Swap</button>
+                  <button class="swap-btn" onclick="openPicker(${day.n}, '${s.k}')">Choose meal</button>
                 </div>
+                <div class="slot-meta">${meal.cuisine} · ${meal.mainIngredient}</div>
               </div>
               <div class="slot-kcal tabular">~${meal.kcal} kcal</div>
             </div>
-            <select id="${selectId}" class="swap-select" style="display:none" onchange="onSwap(this, ${day.n}, '${s.k}')">${options}</select>
             ${meal.hisAdd ? `<div class="his-line">+ for him: <b>${meal.hisAdd.text}</b></div>` : ""}
           </div>
         </div>`;
@@ -86,14 +87,105 @@ function renderPlan() {
   document.getElementById("plan-root").innerHTML = html;
 }
 
-function toggleSwap(selectId) {
-  const el = document.getElementById(selectId);
-  if (el) el.style.display = el.style.display === "none" ? "block" : "none";
+/* ---------------------------------------------------------
+   MEAL PICKER (tap-to-choose — the mobile-friendly alternative
+   to drag-and-drop: browse the pool, filter by cuisine or main
+   ingredient, tap a card to assign it to that slot)
+--------------------------------------------------------- */
+let pickerDayN = null;
+let pickerSlotK = null;
+let pickerCuisine = "all";
+let pickerIngredient = "all";
+
+function openPicker(dayN, slotK) {
+  pickerDayN = dayN;
+  pickerSlotK = slotK;
+  pickerCuisine = "all";
+  pickerIngredient = "all";
+
+  const overlay = document.createElement("div");
+  overlay.className = "picker-overlay";
+  overlay.id = "picker-overlay";
+  overlay.innerHTML = `
+    <div class="picker-panel">
+      <div class="picker-head">
+        <h3 id="picker-title"></h3>
+        <button class="picker-close" onclick="closePicker()" aria-label="Close">&times;</button>
+      </div>
+      <div class="picker-filters" id="picker-filters"></div>
+      <div class="picker-grid" id="picker-grid"></div>
+    </div>`;
+  overlay.addEventListener("click", e => { if (e.target === overlay) closePicker(); });
+  document.body.appendChild(overlay);
+  document.addEventListener("keydown", pickerEscHandler);
+  renderPicker();
 }
-function onSwap(selectEl, dayN, slotK) {
+
+function pickerEscHandler(e) { if (e.key === "Escape") closePicker(); }
+
+function closePicker() {
+  const overlay = document.getElementById("picker-overlay");
+  if (overlay) overlay.remove();
+  document.removeEventListener("keydown", pickerEscHandler);
+  pickerDayN = null;
+  pickerSlotK = null;
+}
+
+function setPickerFacet(kind, value) {
+  if (kind === "cuisine") pickerCuisine = value;
+  else pickerIngredient = value;
+  renderPicker();
+}
+
+function renderPicker() {
+  if (pickerDayN === null) return;
+  const day = DEFAULT_PLAN.find(d => d.n === pickerDayN);
+  const slot = day.slots.find(s => s.k === pickerSlotK);
+  const currentId = currentMealId(day, slot);
+  const pool = mealsOfCategory(pickerSlotK);
+
+  document.getElementById("picker-title").textContent = `Choose ${SLOT_LABELS[pickerSlotK].toLowerCase()} for ${day.weekday}`;
+
+  const cuisines = uniqueFacet(pool, "cuisine");
+  const ingredients = uniqueFacet(pool, "mainIngredient");
+  const chipRow = (label, all, current, kind) => `
+    <div class="picker-filter-group">
+      <span class="picker-filter-label">${label}</span>
+      <div class="picker-chips">
+        <button class="chip ${current === "all" ? "active" : ""}" onclick="setPickerFacet('${kind}','all')">All</button>
+        ${all.map(v => `<button class="chip ${current === v ? "active" : ""}" onclick="setPickerFacet('${kind}','${v}')">${v}</button>`).join("")}
+      </div>
+    </div>`;
+  document.getElementById("picker-filters").innerHTML =
+    chipRow("Cuisine", cuisines, pickerCuisine, "cuisine") +
+    chipRow("Main ingredient", ingredients, pickerIngredient, "ingredient");
+
+  const filtered = pool.filter(m =>
+    (pickerCuisine === "all" || m.cuisine === pickerCuisine) &&
+    (pickerIngredient === "all" || m.mainIngredient === pickerIngredient));
+
+  let cardsHtml = filtered.map(m => `
+    <button class="picker-card ${m.id === currentId ? "selected" : ""}" onclick="pickMeal(${pickerDayN}, '${pickerSlotK}', '${m.id}')">
+      <div class="picker-card-top">
+        <span class="picker-card-title">${m.title}${m.id === currentId ? " <span class='picker-current'>· current</span>" : ""}</span>
+        <span class="kcal-pill tabular">~${m.kcal} kcal</span>
+      </div>
+      <div class="badges">
+        <span class="badge" style="background:var(--primary-tint);color:var(--primary-deep);">${m.cuisine}</span>
+        <span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${m.mainIngredient}</span>
+        ${batchBadge(m.batch)}
+      </div>
+      ${m.hisAdd ? `<div class="picker-card-his">+ for him: ${m.hisAdd.text}</div>` : ""}
+    </button>`).join("");
+  if (!filtered.length) cardsHtml = `<p style="color:var(--ink-soft);padding:6px 2px;">No meals match those filters — try clearing one.</p>`;
+  document.getElementById("picker-grid").innerHTML = cardsHtml;
+}
+
+function pickMeal(dayN, slotK, mealId) {
   const day = DEFAULT_PLAN.find(d => d.n === dayN);
   const slot = day.slots.find(s => s.k === slotK);
-  setMeal(day, slot, selectEl.value);
+  setMeal(day, slot, mealId);
+  closePicker();
   renderAll();
   persist();
 }
@@ -102,6 +194,8 @@ function onSwap(selectEl, dayN, slotK) {
    RECIPES
 --------------------------------------------------------- */
 let recipeFilter = "all";
+let recipeCuisine = "all";
+let recipeIngredient = "all";
 let recipeQuery = "";
 
 function batchBadge(b) {
@@ -115,9 +209,21 @@ function renderRecipes() {
   ).join("");
   document.getElementById("recipe-filters").innerHTML = filterHtml;
 
+  const cuisines = uniqueFacet(MEALS, "cuisine");
+  const ingredients = uniqueFacet(MEALS, "mainIngredient");
+  const chip = (v, current, setter) => `<button class="chip ${current === v ? "active" : ""}" onclick="${setter}('${v}')">${v}</button>`;
+  document.getElementById("recipe-cuisine-filters").innerHTML =
+    `<button class="chip ${recipeCuisine === "all" ? "active" : ""}" onclick="setRecipeCuisine('all')">All cuisines</button>` +
+    cuisines.map(v => chip(v, recipeCuisine, "setRecipeCuisine")).join("");
+  document.getElementById("recipe-ingredient-filters").innerHTML =
+    `<button class="chip ${recipeIngredient === "all" ? "active" : ""}" onclick="setRecipeIngredient('all')">All ingredients</button>` +
+    ingredients.map(v => chip(v, recipeIngredient, "setRecipeIngredient")).join("");
+
   const q = recipeQuery.trim().toLowerCase();
   const list = MEALS.filter(m => (recipeFilter === "all" || m.category === recipeFilter) &&
-    (!q || m.title.toLowerCase().includes(q) || m.ingredients.some(i => i.text.toLowerCase().includes(q))));
+    (recipeCuisine === "all" || m.cuisine === recipeCuisine) &&
+    (recipeIngredient === "all" || m.mainIngredient === recipeIngredient) &&
+    (!q || m.title.toLowerCase().includes(q) || m.cuisine.toLowerCase().includes(q) || m.ingredients.some(i => i.text.toLowerCase().includes(q))));
 
   let html = "";
   if (!list.length) {
@@ -128,7 +234,7 @@ function renderRecipes() {
       <div class="recipe-head">
         <div>
           <h3>${m.title}</h3>
-          <div class="badges"><span class="badge gf">Gluten-free</span>${batchBadge(m.batch)}<span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${SLOT_LABELS[m.category]}</span></div>
+          <div class="badges"><span class="badge gf">Gluten-free</span>${batchBadge(m.batch)}<span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${SLOT_LABELS[m.category]}</span><span class="badge" style="background:var(--primary-tint);color:var(--primary-deep);">${m.cuisine}</span><span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${m.mainIngredient}</span></div>
         </div>
         <div class="kcal-pill tabular">~${m.kcal} kcal (your portion)</div>
       </div>
@@ -149,6 +255,8 @@ function renderRecipes() {
   document.getElementById("recipes-root").innerHTML = html;
 }
 function setRecipeFilter(key) { recipeFilter = key; renderRecipes(); }
+function setRecipeCuisine(v) { recipeCuisine = v; renderRecipes(); }
+function setRecipeIngredient(v) { recipeIngredient = v; renderRecipes(); }
 function onRecipeSearch(el) { recipeQuery = el.value; renderRecipes(); }
 
 /* ---------------------------------------------------------
