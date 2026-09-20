@@ -89,17 +89,19 @@ function renderPlan() {
 
 /* ---------------------------------------------------------
    MEAL PICKER (tap-to-choose — the mobile-friendly alternative
-   to drag-and-drop: browse the pool, filter by cuisine or main
-   ingredient, tap a card to assign it to that slot)
+   to drag-and-drop: browse the WHOLE pool, optionally narrow by
+   meal type, cuisine or main ingredient, tap a card to assign it)
 --------------------------------------------------------- */
 let pickerDayN = null;
 let pickerSlotK = null;
+let pickerMealType = "all";
 let pickerCuisine = "all";
 let pickerIngredient = "all";
 
 function openPicker(dayN, slotK) {
   pickerDayN = dayN;
   pickerSlotK = slotK;
+  pickerMealType = "all";
   pickerCuisine = "all";
   pickerIngredient = "all";
 
@@ -132,7 +134,8 @@ function closePicker() {
 }
 
 function setPickerFacet(kind, value) {
-  if (kind === "cuisine") pickerCuisine = value;
+  if (kind === "type") pickerMealType = value;
+  else if (kind === "cuisine") pickerCuisine = value;
   else pickerIngredient = value;
   renderPicker();
 }
@@ -142,10 +145,11 @@ function renderPicker() {
   const day = DEFAULT_PLAN.find(d => d.n === pickerDayN);
   const slot = day.slots.find(s => s.k === pickerSlotK);
   const currentId = currentMealId(day, slot);
-  const pool = mealsOfCategory(pickerSlotK);
+  const pool = MEALS; // the whole pool — browse and pick any dish for any slot
 
-  document.getElementById("picker-title").textContent = `Choose ${SLOT_LABELS[pickerSlotK].toLowerCase()} for ${day.weekday}`;
+  document.getElementById("picker-title").textContent = `Choose a meal for ${day.weekday} ${SLOT_LABELS[pickerSlotK].toLowerCase()}`;
 
+  const mealTypes = uniqueFacet(pool, "category").map(c => SLOT_LABELS[c]);
   const cuisines = uniqueFacet(pool, "cuisine");
   const ingredients = uniqueFacet(pool, "mainIngredient");
   const chipRow = (label, all, current, kind) => `
@@ -157,10 +161,12 @@ function renderPicker() {
       </div>
     </div>`;
   document.getElementById("picker-filters").innerHTML =
+    chipRow("Meal type", mealTypes, pickerMealType, "type") +
     chipRow("Cuisine", cuisines, pickerCuisine, "cuisine") +
     chipRow("Main ingredient", ingredients, pickerIngredient, "ingredient");
 
   const filtered = pool.filter(m =>
+    (pickerMealType === "all" || SLOT_LABELS[m.category] === pickerMealType) &&
     (pickerCuisine === "all" || m.cuisine === pickerCuisine) &&
     (pickerIngredient === "all" || m.mainIngredient === pickerIngredient));
 
@@ -171,6 +177,7 @@ function renderPicker() {
         <span class="kcal-pill tabular">~${m.kcal} kcal</span>
       </div>
       <div class="badges">
+        <span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${SLOT_LABELS[m.category]}</span>
         <span class="badge" style="background:var(--primary-tint);color:var(--primary-deep);">${m.cuisine}</span>
         <span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${m.mainIngredient}</span>
         ${batchBadge(m.batch)}
