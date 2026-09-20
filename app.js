@@ -20,6 +20,60 @@ function uniqueFacet(list, key) {
 }
 
 /* ---------------------------------------------------------
+   PROFILES — a personal link (?p=code) gives someone their own
+   filtered pool, calorie target and plan, synced separately from
+   the shared household plan below (which stays exactly as before
+   when there's no ?p= in the URL).
+--------------------------------------------------------- */
+const URL_PARAMS = new URLSearchParams(location.search);
+const PROFILE_CODE = (URL_PARAMS.get("p") || "").trim().toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40);
+const IS_PROFILE = !!PROFILE_CODE;
+
+let PROFILE = null; // { name, calorieTarget, vegetarian, dairyFree, avoid: [], favCuisines: [], favIngredients: [] }
+let PLAN = DEFAULT_PLAN; // the 14-day skeleton actually rendered — swapped for a profile's own on boot
+let POOL = MEALS;         // the meal pool actually offered — filtered per-profile on boot
+let TARGET_KCAL = 1300;
+
+function profileLocalKey(suffix) { return `twoPlatesProfile:${PROFILE_CODE}:${suffix}`; }
+function loadProfileLocal() {
+  try { return JSON.parse(localStorage.getItem(profileLocalKey("settings")) || "null"); } catch (e) { return null; }
+}
+function loadProfileLocalState() {
+  try { return JSON.parse(localStorage.getItem(profileLocalKey("state")) || "null"); } catch (e) { return null; }
+}
+
+function passesFilters(m) {
+  if (!PROFILE) return true;
+  if (PROFILE.vegetarian && !m.vegetarian) return false;
+  if (PROFILE.dairyFree && !m.dairyFree) return false;
+  if (PROFILE.avoid && PROFILE.avoid.length) {
+    const text = (m.title + " " + m.ingredients.map(i => i.text).join(" ") + (m.hisAdd ? " " + m.hisAdd.text : "")).toLowerCase();
+    if (PROFILE.avoid.some(a => a && text.includes(a))) return false;
+  }
+  return true;
+}
+function isFavourite(m) {
+  if (!PROFILE) return false;
+  return (PROFILE.favCuisines || []).includes(m.cuisine) || (PROFILE.favIngredients || []).includes(m.mainIngredient);
+}
+function favBadge(m) {
+  return isFavourite(m) ? `<span class="badge fav">★ Favourite</span>` : "";
+}
+
+// Every profile gets the same 14-day/weekday skeleton as the household
+// plan, but each slot's starting dish is the first thing in HER filtered
+// pool for that meal type, not the fixed household defaults.
+function buildProfilePlan() {
+  return DEFAULT_PLAN.map(day => ({
+    n: day.n, week: day.week, weekday: day.weekday,
+    slots: day.slots.map(s => {
+      const def = POOL.find(m => m.category === s.k) || MEALS.find(m => m.category === s.k);
+      return { k: s.k, id: def.id };
+    })
+  }));
+}
+
+/* ---------------------------------------------------------
    STATE
 --------------------------------------------------------- */
 let STATE = { plan: {}, checks: {} };
@@ -40,8 +94,20 @@ function toggleCheck(key) {
   persist();
 }
 
+function persistProfile() {
+  try {
+    localStorage.setItem(profileLocalKey("settings"), JSON.stringify(PROFILE));
+    localStorage.setItem(profileLocalKey("state"), JSON.stringify(STATE));
+  } catch (e) {}
+  if (SYNC.savePath) {
+    SYNC.savePath(`profiles/${PROFILE_CODE}/settings`, PROFILE);
+    SYNC.savePath(`profiles/${PROFILE_CODE}/state`, STATE);
+  }
+}
+
 function persist() {
-  SYNC.save(STATE);
+  if (IS_PROFILE) persistProfile();
+  else SYNC.save(STATE);
 }
 
 /* ---------------------------------------------------------
@@ -55,9 +121,10 @@ function renderPlan() {
   let html = "";
   [1, 2].forEach(w => {
     html += `<div class="week-heading"><h2>Week ${w}</h2><span>shift the whole plan to whichever week suits you</span></div>`;
-    DEFAULT_PLAN.filter(d => d.week === w).forEach(day => {
+    PLAN.filter(d => d.week === w).forEach(day => {
       const total = dayTotal(day);
-      html += `<div class="day-card"><div class="day-card-head"><h3>${day.weekday}</h3><span class="day-total tabular">~${total} kcal</span></div>`;
+      const overTarget = IS_PROFILE && total > TARGET_KCAL + 50;
+      html += `<div class="day-card"><div class="day-card-head"><h3>${day.weekday}</h3><span class="day-total tabular ${overTarget ? "over" : ""}">~${total} kcal${IS_PROFILE ? ` / ${TARGET_KCAL}` : ""}</span></div>`;
       day.slots.forEach(s => {
         const mealId = currentMealId(day, s);
         const meal = MEALS_BY_ID[mealId];
@@ -89,8 +156,8 @@ function renderPlan() {
 
 /* ---------------------------------------------------------
    MEAL PICKER (tap-to-choose — the mobile-friendly alternative
-   to drag-and-drop: browse the WHOLE pool, optionally narrow by
-   meal type, cuisine or main ingredient, tap a card to assign it)
+   to drag-and-drop: browse the pool, filter by cuisine or main
+   ingredient, tap a card to assign it to that slot)
 --------------------------------------------------------- */
 let pickerDayN = null;
 let pickerSlotK = null;
@@ -142,10 +209,10 @@ function setPickerFacet(kind, value) {
 
 function renderPicker() {
   if (pickerDayN === null) return;
-  const day = DEFAULT_PLAN.find(d => d.n === pickerDayN);
+  const day = PLAN.find(d => d.n === pickerDayN);
   const slot = day.slots.find(s => s.k === pickerSlotK);
   const currentId = currentMealId(day, slot);
-  const pool = MEALS; // the whole pool — browse and pick any dish for any slot
+  const pool = POOL; // the whole (filtered, if you have a personal profile) pool
 
   document.getElementById("picker-title").textContent = `Choose a meal for ${day.weekday} ${SLOT_LABELS[pickerSlotK].toLowerCase()}`;
 
@@ -180,16 +247,16 @@ function renderPicker() {
         <span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${SLOT_LABELS[m.category]}</span>
         <span class="badge" style="background:var(--primary-tint);color:var(--primary-deep);">${m.cuisine}</span>
         <span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${m.mainIngredient}</span>
-        ${batchBadge(m.batch)}
+        ${batchBadge(m.batch)}${favBadge(m)}
       </div>
-      ${m.hisAdd ? `<div class="picker-card-his">+ for him: ${m.hisAdd.text}</div>` : ""}
+      ${m.hisAdd ? `<div class="picker-card-his">+ ${IS_PROFILE ? "optional carb side" : "for him"}: ${m.hisAdd.text}</div>` : ""}
     </button>`).join("");
   if (!filtered.length) cardsHtml = `<p style="color:var(--ink-soft);padding:6px 2px;">No meals match those filters — try clearing one.</p>`;
   document.getElementById("picker-grid").innerHTML = cardsHtml;
 }
 
 function pickMeal(dayN, slotK, mealId) {
-  const day = DEFAULT_PLAN.find(d => d.n === dayN);
+  const day = PLAN.find(d => d.n === dayN);
   const slot = day.slots.find(s => s.k === slotK);
   setMeal(day, slot, mealId);
   closePicker();
@@ -216,8 +283,8 @@ function renderRecipes() {
   ).join("");
   document.getElementById("recipe-filters").innerHTML = filterHtml;
 
-  const cuisines = uniqueFacet(MEALS, "cuisine");
-  const ingredients = uniqueFacet(MEALS, "mainIngredient");
+  const cuisines = uniqueFacet(POOL, "cuisine");
+  const ingredients = uniqueFacet(POOL, "mainIngredient");
   const chip = (v, current, setter) => `<button class="chip ${current === v ? "active" : ""}" onclick="${setter}('${v}')">${v}</button>`;
   document.getElementById("recipe-cuisine-filters").innerHTML =
     `<button class="chip ${recipeCuisine === "all" ? "active" : ""}" onclick="setRecipeCuisine('all')">All cuisines</button>` +
@@ -227,7 +294,7 @@ function renderRecipes() {
     ingredients.map(v => chip(v, recipeIngredient, "setRecipeIngredient")).join("");
 
   const q = recipeQuery.trim().toLowerCase();
-  const list = MEALS.filter(m => (recipeFilter === "all" || m.category === recipeFilter) &&
+  const list = POOL.filter(m => (recipeFilter === "all" || m.category === recipeFilter) &&
     (recipeCuisine === "all" || m.cuisine === recipeCuisine) &&
     (recipeIngredient === "all" || m.mainIngredient === recipeIngredient) &&
     (!q || m.title.toLowerCase().includes(q) || m.cuisine.toLowerCase().includes(q) || m.ingredients.some(i => i.text.toLowerCase().includes(q))));
@@ -241,7 +308,7 @@ function renderRecipes() {
       <div class="recipe-head">
         <div>
           <h3>${m.title}</h3>
-          <div class="badges"><span class="badge gf">Gluten-free</span>${batchBadge(m.batch)}<span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${SLOT_LABELS[m.category]}</span><span class="badge" style="background:var(--primary-tint);color:var(--primary-deep);">${m.cuisine}</span><span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${m.mainIngredient}</span></div>
+          <div class="badges"><span class="badge gf">Gluten-free</span>${batchBadge(m.batch)}${favBadge(m)}<span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${SLOT_LABELS[m.category]}</span><span class="badge" style="background:var(--primary-tint);color:var(--primary-deep);">${m.cuisine}</span><span class="badge" style="background:var(--surface-2);color:var(--ink-soft);">${m.mainIngredient}</span></div>
         </div>
         <div class="kcal-pill tabular">~${m.kcal} kcal (your portion)</div>
       </div>
@@ -249,7 +316,7 @@ function renderRecipes() {
         <div>
           <h4>Ingredients</h4>
           <ul>${m.ingredients.map(i => `<li class="ing"><span class="itext">${i.text}</span><a class="ocado-link" target="_blank" rel="noopener" href="${ocadoUrl(i.q)}">Ocado ↗</a></li>`).join("")}</ul>
-          ${m.hisAdd ? `<div class="his-add"><b>For his plate, add:</b> ${m.hisAdd.text} <a class="ocado-link" style="margin-left:6px;" target="_blank" rel="noopener" href="${ocadoUrl(m.hisAdd.q)}">Ocado ↗</a></div>` : ""}
+          ${m.hisAdd ? `<div class="his-add"><b>${IS_PROFILE ? "Optional carb side:" : "For his plate, add:"}</b> ${m.hisAdd.text} <a class="ocado-link" style="margin-left:6px;" target="_blank" rel="noopener" href="${ocadoUrl(m.hisAdd.q)}">Ocado ↗</a></div>` : ""}
         </div>
         <div>
           <h4>Method</h4>
@@ -276,7 +343,7 @@ function buildShoppingList(week) {
   const buckets = {};
   SHOP_CAT_ORDER.forEach(c => (buckets[c] = new Map())); // text -> {text, q}
 
-  DEFAULT_PLAN.filter(d => d.week === week).forEach(day => {
+  PLAN.filter(d => d.week === week).forEach(day => {
     day.slots.forEach(s => {
       const meal = MEALS_BY_ID[currentMealId(day, s)];
       meal.ingredients.forEach(ing => {
@@ -338,6 +405,105 @@ function renderPantry() {
 }
 
 /* ---------------------------------------------------------
+   PROFILE SETUP — the form shown on a personal link (?p=code)
+   the first time, or reopened later to edit preferences
+--------------------------------------------------------- */
+let profileFormFav = { cuisines: [], ingredients: [] };
+
+function openProfileSetup() {
+  closeProfileSetup();
+  const overlay = document.createElement("div");
+  overlay.className = "picker-overlay";
+  overlay.id = "profile-overlay";
+  const p = PROFILE || {};
+  profileFormFav = { cuisines: (p.favCuisines || []).slice(), ingredients: (p.favIngredients || []).slice() };
+  const cuisineChips = uniqueFacet(MEALS, "cuisine").map(c =>
+    `<button type="button" class="chip ${profileFormFav.cuisines.includes(c) ? "active" : ""}" onclick="toggleFav('cuisines','${c}')">${c}</button>`).join("");
+  const ingredientChips = uniqueFacet(MEALS, "mainIngredient").map(c =>
+    `<button type="button" class="chip ${profileFormFav.ingredients.includes(c) ? "active" : ""}" onclick="toggleFav('ingredients','${c}')">${c}</button>`).join("");
+  overlay.innerHTML = `
+    <div class="picker-panel profile-panel">
+      <div class="picker-head"><h3>${p.name ? "Edit your preferences" : "Set up your own plan"}</h3>${p.name ? `<button class="picker-close" onclick="closeProfileSetup()" aria-label="Close">&times;</button>` : ""}</div>
+      <div class="profile-form">
+        ${p.name ? "" : `<p class="pf-intro">This link (<code>?p=${PROFILE_CODE}</code>) is yours alone — bookmark it and you'll see your own plan every time, filtered to your preferences below.</p>`}
+        <label>Your name<input id="pf-name" type="text" value="${p.name || ""}" placeholder="e.g. Sarah"></label>
+        <label>Daily calorie target<input id="pf-kcal" type="number" value="${p.calorieTarget || 1600}" min="800" max="4000"></label>
+        <div class="pf-row">
+          <label><input id="pf-veg" type="checkbox" ${p.vegetarian ? "checked" : ""}> Vegetarian</label>
+          <label><input id="pf-df" type="checkbox" ${p.dairyFree ? "checked" : ""}> Dairy-free</label>
+        </div>
+        <label>Favourite cuisines <span class="pf-hint">(highlighted with a ★, not required)</span></label>
+        <div class="picker-chips" id="pf-cuisines">${cuisineChips}</div>
+        <label>Favourite main ingredients</label>
+        <div class="picker-chips" id="pf-ingredients">${ingredientChips}</div>
+        <label>Ingredients to avoid <span class="pf-hint">(comma-separated — hides any dish containing these)</span>
+          <input id="pf-avoid" type="text" value="${(p.avoid || []).join(", ")}" placeholder="e.g. mushroom, prawns, olives"></label>
+        <button class="pf-save" onclick="saveProfileForm()">Save &amp; see my plan</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+function toggleFav(kind, value) {
+  const list = profileFormFav[kind];
+  const i = list.indexOf(value);
+  if (i === -1) list.push(value); else list.splice(i, 1);
+  document.getElementById(kind === "cuisines" ? "pf-cuisines" : "pf-ingredients")
+    .querySelectorAll("button").forEach(b => b.classList.toggle("active", list.includes(b.textContent)));
+}
+function closeProfileSetup() {
+  const o = document.getElementById("profile-overlay");
+  if (o) o.remove();
+}
+function saveProfileForm() {
+  const name = document.getElementById("pf-name").value.trim();
+  const kcal = Number(document.getElementById("pf-kcal").value) || 1600;
+  const veg = document.getElementById("pf-veg").checked;
+  const df = document.getElementById("pf-df").checked;
+  const avoid = document.getElementById("pf-avoid").value.split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
+  PROFILE = { name, calorieTarget: kcal, vegetarian: veg, dairyFree: df, avoid, favCuisines: profileFormFav.cuisines.slice(), favIngredients: profileFormFav.ingredients.slice() };
+  TARGET_KCAL = kcal;
+  POOL = MEALS.filter(passesFilters);
+  if (!POOL.length) POOL = MEALS; // never let an over-strict filter empty the whole pool
+  PLAN = buildProfilePlan();
+  persistProfile();
+  closeProfileSetup();
+  renderAll();
+  applyProfileChrome();
+}
+
+function applyProfileChrome() {
+  if (!IS_PROFILE || !PROFILE) return;
+  document.title = `${PROFILE.name ? PROFILE.name + "'s" : "Your"} plan — Two Plates, One Table`;
+  const eyebrow = document.querySelector("header .eyebrow");
+  const h1 = document.querySelector("header h1");
+  const lede = document.querySelector("header .lede");
+  if (eyebrow) eyebrow.textContent = "Your own personalised plan";
+  if (h1) h1.textContent = PROFILE.name ? `${PROFILE.name}'s Plan` : "Your Plan";
+  if (lede) lede.textContent = "Pick meals from your filtered pool below — favourites are starred, the shopping list rebuilds itself as you go.";
+  const target = document.getElementById("rule-target");
+  if (target) target.innerHTML = `<b>~${TARGET_KCAL} kcal</b> target, breakfast + lunch + dinner every day`;
+  const evening = document.getElementById("rule-evening");
+  if (evening) evening.innerHTML = `Fully yours — add an optional carb side to any dinner if you want one`;
+  const dietYou = document.getElementById("rule-diet-you");
+  if (dietYou) {
+    const bits = ["Whole pool is gluten-free"];
+    if (PROFILE.vegetarian) bits.push("vegetarian only");
+    if (PROFILE.dairyFree) bits.push("dairy-free only");
+    if (PROFILE.avoid && PROFILE.avoid.length) bits.push(`avoiding ${PROFILE.avoid.join(", ")}`);
+    dietYou.innerHTML = `<b>${bits.join(" · ")}</b>`;
+  }
+  const himCard = document.getElementById("rule-diet-him");
+  if (himCard) { const card = himCard.closest(".rule-card"); if (card) card.style.display = "none"; }
+  const note = document.getElementById("sync-note");
+  if (note) {
+    const link = `${location.origin}${location.pathname}?p=${PROFILE_CODE}`;
+    note.insertAdjacentHTML("afterend",
+      `<div class="profile-link">Your personal link — bookmark it to see this plan again: <code>${link}</code>
+        <button onclick="openProfileSetup()">Edit preferences</button></div>`);
+  }
+}
+
+/* ---------------------------------------------------------
    NAV + BOOT
 --------------------------------------------------------- */
 function switchTab(name) {
@@ -390,6 +556,11 @@ async function boot() {
     if (btn) setShopWeek(Number(btn.dataset.week));
   });
 
+  if (IS_PROFILE) {
+    await bootProfile();
+    return;
+  }
+
   STATE = Object.assign({ plan: {}, checks: {} }, SYNC.loadLocal());
   renderAll();
 
@@ -406,9 +577,45 @@ async function boot() {
       note.classList.add("warn");
     }
   } else {
-    note.textContent = "Not synced yet — see README.md to connect a free Google Sheet so both of you see the same plan.";
+    note.textContent = "Not synced yet — see README.md to turn on a free sync so both of you see the same plan.";
     note.classList.add("warn");
   }
+}
+
+async function bootProfile() {
+  PROFILE = loadProfileLocal();
+  STATE = Object.assign({ plan: {}, checks: {} }, loadProfileLocalState() || {});
+  const note = document.getElementById("sync-note");
+
+  if (SYNC.isConfigured()) {
+    const [remoteSettings, remoteState] = await Promise.all([
+      SYNC.loadPath(`profiles/${PROFILE_CODE}/settings`),
+      SYNC.loadPath(`profiles/${PROFILE_CODE}/state`)
+    ]);
+    if (remoteSettings) PROFILE = remoteSettings;
+    if (remoteState) STATE = Object.assign({ plan: {}, checks: {} }, remoteState);
+  }
+
+  if (!PROFILE) {
+    TARGET_KCAL = 1600;
+    POOL = MEALS;
+    PLAN = buildProfilePlan();
+    renderAll();
+    note.textContent = "";
+    openProfileSetup();
+    return;
+  }
+
+  TARGET_KCAL = PROFILE.calorieTarget || 1600;
+  POOL = MEALS.filter(passesFilters);
+  if (!POOL.length) POOL = MEALS;
+  PLAN = buildProfilePlan();
+  renderAll();
+  applyProfileChrome();
+  note.textContent = SYNC.isConfigured()
+    ? "Synced ✓ — this link remembers your plan on any device you open it on."
+    : "Saved to this device only for now — see README.md to turn on syncing across devices.";
+  if (!SYNC.isConfigured()) note.classList.add("warn");
 }
 
 document.addEventListener("DOMContentLoaded", boot);
