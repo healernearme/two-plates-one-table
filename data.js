@@ -4,6 +4,7 @@
    category: "breakfast" | "brunch" | "lunch" | "dinner" — which slot it can fill
    cuisine: a broad flavour family, used as a browse/filter facet
    mainIngredient: the headline ingredient, used as a second browse/filter facet
+   vegetarian / dairyFree: used to filter personal profile links (?p=code)
    Each ingredient: { text: "shown in the recipe", cat: shopping category, q: short Ocado search term }
    Dinners carry hisAdd: { text, cat, q } for the partner's carb side.
    ========================================================================== */
@@ -19,7 +20,7 @@ const CATS = {
 const MEALS = [
   // ---------- BREAKFASTS ----------
   {
-    id: "bf1", category: "breakfast", title: "Greek yogurt, berries & chia", kcal: 320, batch: "fresh", gf: true,
+    id: "bf1", category: "breakfast", title: "Greek yogurt, berries & chia", kcal: 320, batch: "fresh", gf: true, vegetarian: true, dairyFree: false,
     cuisine: "Everyday", mainIngredient: "Vegetarian",
     ingredients: [
       { text: "200g 0% or 2% Greek yogurt", cat: CATS.FRIDGE, q: "Greek yogurt" },
@@ -36,7 +37,7 @@ const MEALS = [
     tip: "A few drops of vanilla extract or a curl of lemon zest makes this taste far less like a diet breakfast."
   },
   {
-    id: "bf2", category: "breakfast", title: "Veggie omelette with spinach & tomato", kcal: 310, batch: "fresh", gf: true,
+    id: "bf2", category: "breakfast", title: "Veggie omelette with spinach & tomato", kcal: 310, batch: "fresh", gf: true, vegetarian: true, dairyFree: true,
     cuisine: "Everyday", mainIngredient: "Eggs",
     ingredients: [
       { text: "2 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
@@ -54,7 +55,7 @@ const MEALS = [
     tip: "A pinch of dried oregano in the egg mix and a few shavings of hard cheese (for you) turn this Mediterranean instead of plain."
   },
   {
-    id: "bf3", category: "breakfast", title: "Gluten-free overnight oats with berries", kcal: 315, batch: "batch", gf: true,
+    id: "bf3", category: "breakfast", title: "Gluten-free overnight oats with berries", kcal: 315, batch: "batch", gf: true, vegetarian: true, dairyFree: false,
     cuisine: "Everyday", mainIngredient: "Vegetarian",
     ingredients: [
       { text: "45g certified gluten-free oats", cat: CATS.CUPBOARD, q: "gluten free oats" },
@@ -71,7 +72,7 @@ const MEALS = [
     tip: "Make three or four jars at once on a Sunday — they keep well for up to 4 days and mean zero effort on weekday mornings."
   },
   {
-    id: "bf4", category: "breakfast", title: "Cottage cheese with fruit & walnuts", kcal: 310, batch: "fresh", gf: true,
+    id: "bf4", category: "breakfast", title: "Cottage cheese with fruit & walnuts", kcal: 310, batch: "fresh", gf: true, vegetarian: true, dairyFree: false,
     cuisine: "Everyday", mainIngredient: "Vegetarian",
     ingredients: [
       { text: "200g cottage cheese", cat: CATS.FRIDGE, q: "cottage cheese" },
@@ -89,7 +90,7 @@ const MEALS = [
 
   // ---------- BRUNCHES ----------
   {
-    id: "br1", category: "brunch", title: "Eggs, baked beans & grilled tomato", kcal: 730, batch: "fresh", gf: true,
+    id: "br1", category: "brunch", title: "Eggs, baked beans & grilled tomato", kcal: 730, batch: "fresh", gf: true, vegetarian: true, dairyFree: false,
     cuisine: "British", mainIngredient: "Eggs",
     ingredients: [
       { text: "2 eggs, fried or poached", cat: CATS.FRIDGE, q: "free range eggs" },
@@ -108,7 +109,7 @@ const MEALS = [
     tip: "A few shakes of Worcestershire-style sauce (check GF) or a swirl of chilli oil on the side — not mixed through your beans if you want to keep them mild — lifts this a lot."
   },
   {
-    id: "br2", category: "brunch", title: "Smoked salmon, poached egg & avocado", kcal: 750, batch: "fresh", gf: true,
+    id: "br2", category: "brunch", title: "Smoked salmon, poached egg & avocado", kcal: 750, batch: "fresh", gf: true, vegetarian: false, dairyFree: true,
     cuisine: "British", mainIngredient: "Fish",
     ingredients: [
       { text: "100g smoked salmon", cat: CATS.MEAT, q: "smoked salmon" },
@@ -126,7 +127,7 @@ const MEALS = [
     tip: "A scattering of fresh dill makes this taste like a weekend hotel brunch rather than a meal-prep plate."
   },
   {
-    id: "br3", category: "brunch", title: "Mediterranean baked eggs (mild)", kcal: 720, batch: "fresh", gf: true,
+    id: "br3", category: "brunch", title: "Mediterranean baked eggs (mild)", kcal: 720, batch: "fresh", gf: true, vegetarian: true, dairyFree: false,
     cuisine: "Mediterranean", mainIngredient: "Eggs",
     ingredients: [
       { text: "2 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
@@ -149,7 +150,7 @@ const MEALS = [
     tip: "This is a shakshuka built mild on purpose — keep a small jar of chilli flakes on the table so anyone who wants heat can add their own."
   },
   {
-    id: "br4", category: "brunch", title: "Turkish-style breakfast plate", kcal: 720, batch: "fresh", gf: true,
+    id: "br4", category: "brunch", title: "Turkish-style breakfast plate", kcal: 720, batch: "fresh", gf: true, vegetarian: true, dairyFree: false,
     cuisine: "Turkish", mainIngredient: "Eggs",
     ingredients: [
       { text: "2 eggs, soft-boiled or fried", cat: CATS.FRIDGE, q: "free range eggs" },
@@ -172,7 +173,7 @@ const MEALS = [
 
   // ---------- LUNCHES ----------
   {
-    id: "l1", category: "lunch", title: "Baked lemon salmon, sweet potato & greens", kcal: 450, batch: "batch", gf: true,
+    id: "l1", category: "lunch", title: "Baked lemon salmon, sweet potato & greens", kcal: 450, batch: "batch", gf: true, vegetarian: false, dairyFree: false,
     cuisine: "Mediterranean", mainIngredient: "Fish",
     ingredients: [
       { text: "130g salmon fillet", cat: CATS.MEAT, q: "salmon fillet" },
@@ -191,7 +192,7 @@ const MEALS = [
     tip: "The one non-negotiable of the plan — this is the salmon-and-sweet-potato lunch. Roast a double batch and split it across two lunches; the sweet potato reheats better than you'd expect."
   },
   {
-    id: "l2", category: "lunch", title: "Greek-style chicken & chickpea salad", kcal: 470, batch: "batch", gf: true,
+    id: "l2", category: "lunch", title: "Greek-style chicken & chickpea salad", kcal: 470, batch: "batch", gf: true, vegetarian: false, dairyFree: false,
     cuisine: "Greek", mainIngredient: "Chicken",
     ingredients: [
       { text: "120g chicken breast", cat: CATS.MEAT, q: "chicken breast" },
@@ -214,7 +215,7 @@ const MEALS = [
     tip: "Grill 3–4 chicken breasts at once and keep them sliced in the fridge — this salad comes together in under 10 minutes when the chicken's already done."
   },
   {
-    id: "l3", category: "lunch", title: "Tuna & white bean salad", kcal: 430, batch: "batch", gf: true,
+    id: "l3", category: "lunch", title: "Tuna & white bean salad", kcal: 430, batch: "batch", gf: true, vegetarian: false, dairyFree: true,
     cuisine: "Mediterranean", mainIngredient: "Fish",
     ingredients: [
       { text: "145g tin tuna in spring water, drained", cat: CATS.CUPBOARD, q: "tuna in spring water" },
@@ -235,7 +236,7 @@ const MEALS = [
     tip: "This one needs no cooking at all — make two portions in one go and it keeps in the fridge for up to 3 days, so it's the easiest lunch on the whole plan."
   },
   {
-    id: "l4", category: "lunch", title: "Mediterranean spinach & feta frittata", kcal: 455, batch: "batch", gf: true,
+    id: "l4", category: "lunch", title: "Mediterranean spinach & feta frittata", kcal: 455, batch: "batch", gf: true, vegetarian: true, dairyFree: false,
     cuisine: "Mediterranean", mainIngredient: "Eggs",
     ingredients: [
       { text: "3 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
@@ -257,7 +258,7 @@ const MEALS = [
 
   // ---------- DINNERS (shared) ----------
   {
-    id: "d1", category: "dinner", title: "Steak, garlic butter mushrooms & broccoli", kcal: 535, batch: "fresh", gf: true,
+    id: "d1", category: "dinner", title: "Steak, garlic butter mushrooms & broccoli", kcal: 535, batch: "fresh", gf: true, vegetarian: false, dairyFree: false,
     cuisine: "British", mainIngredient: "Beef",
     ingredients: [
       { text: "180g lean sirloin or rump steak", cat: CATS.MEAT, q: "sirloin steak" },
@@ -279,7 +280,7 @@ const MEALS = [
     tip: "A cracked-pepper-and-Dijon mustard sauce (mustard, a splash of the steak's resting juices, black pepper) makes this taste like a restaurant dish — check your mustard brand is gluten-free."
   },
   {
-    id: "d2", category: "dinner", title: "Mediterranean baked chicken thighs", kcal: 500, batch: "batch", gf: true,
+    id: "d2", category: "dinner", title: "Mediterranean baked chicken thighs", kcal: 500, batch: "batch", gf: true, vegetarian: false, dairyFree: false,
     cuisine: "Mediterranean", mainIngredient: "Chicken",
     ingredients: [
       { text: "2 boneless, skinless chicken thighs (about 170g)", cat: CATS.MEAT, q: "chicken thighs" },
@@ -301,7 +302,7 @@ const MEALS = [
     tip: "This is a genuinely good batch dish — it freezes well, so cook the full amount now and freeze half flat in a bag for the week-2 repeat."
   },
   {
-    id: "d3", category: "dinner", title: "Pan-seared cod with Mediterranean roasted vegetables", kcal: 515, batch: "fresh", gf: true,
+    id: "d3", category: "dinner", title: "Pan-seared cod with Mediterranean roasted vegetables", kcal: 515, batch: "fresh", gf: true, vegetarian: false, dairyFree: true,
     cuisine: "Mediterranean", mainIngredient: "Fish",
     ingredients: [
       { text: "220g cod loin (or another firm white fish)", cat: CATS.MEAT, q: "cod loin" },
@@ -323,7 +324,7 @@ const MEALS = [
     tip: "Fish doesn't reheat well, so cook this fresh both times rather than batching it — but you can chop and prep the vegetables a day ahead to save time."
   },
   {
-    id: "d4", category: "dinner", title: "Turkey meatballs in tomato-basil sauce with courgetti", kcal: 540, batch: "batch", gf: true,
+    id: "d4", category: "dinner", title: "Turkey meatballs in tomato-basil sauce with courgetti", kcal: 540, batch: "batch", gf: true, vegetarian: false, dairyFree: true,
     cuisine: "Italian", mainIngredient: "Turkey",
     ingredients: [
       { text: "180g turkey mince", cat: CATS.MEAT, q: "turkey mince" },
@@ -348,7 +349,7 @@ const MEALS = [
     tip: "Double the meatballs and freeze half in their sauce — they reheat better than almost anything else on this plan."
   },
   {
-    id: "d5", category: "dinner", title: "Greek-style beef koftas with tzatziki", kcal: 525, batch: "batch", gf: true,
+    id: "d5", category: "dinner", title: "Greek-style beef koftas with tzatziki", kcal: 525, batch: "batch", gf: true, vegetarian: false, dairyFree: false,
     cuisine: "Greek", mainIngredient: "Beef",
     ingredients: [
       { text: "170g lean (5%) beef mince", cat: CATS.MEAT, q: "lean beef mince 5%" },
@@ -373,7 +374,7 @@ const MEALS = [
     tip: "Form and freeze the raw koftas in a single layer, then cook straight from frozen (a few extra minutes) for a later repeat — no need to defrost first."
   },
   {
-    id: "d6", category: "dinner", title: "Garlic prawn & tomato skillet with courgette noodles", kcal: 520, batch: "fresh", gf: true,
+    id: "d6", category: "dinner", title: "Garlic prawn & tomato skillet with courgette noodles", kcal: 520, batch: "fresh", gf: true, vegetarian: false, dairyFree: true,
     cuisine: "Mediterranean", mainIngredient: "Seafood",
     ingredients: [
       { text: "280g raw king prawns", cat: CATS.MEAT, q: "raw king prawns" },
@@ -397,7 +398,7 @@ const MEALS = [
     tip: "This is a 15-minute dish start to finish — no need to batch it, just cook it fresh both times."
   },
   {
-    id: "d7", category: "dinner", title: "Herb & lemon roast chicken with ratatouille", kcal: 505, batch: "batch", gf: true,
+    id: "d7", category: "dinner", title: "Herb & lemon roast chicken with ratatouille", kcal: 505, batch: "batch", gf: true, vegetarian: false, dairyFree: true,
     cuisine: "Mediterranean", mainIngredient: "Chicken",
     ingredients: [
       { text: "220g chicken breast", cat: CATS.MEAT, q: "chicken breast" },
@@ -423,7 +424,7 @@ const MEALS = [
     tip: "Ratatouille genuinely improves after a day in the fridge — make the full batch and a later repeat will taste even better than the first."
   },
   {
-    id: "d8", category: "dinner", title: "Beef & courgette lasagne", kcal: 520, batch: "batch", gf: true,
+    id: "d8", category: "dinner", title: "Beef & courgette lasagne", kcal: 520, batch: "batch", gf: true, vegetarian: false, dairyFree: false,
     cuisine: "Italian", mainIngredient: "Beef",
     ingredients: [
       { text: "150g lean (5%) beef mince", cat: CATS.MEAT, q: "lean beef mince 5%" },
@@ -449,7 +450,7 @@ const MEALS = [
     tip: "A layer of fresh basil between the courgette and the ragù keeps every bite tasting bright rather than heavy — a few anchovy fillets stirred into the ragù add a deep savoury note if you like."
   },
   {
-    id: "d9", category: "dinner", title: "Spaghetti bolognese with courgetti", kcal: 500, batch: "batch", gf: true,
+    id: "d9", category: "dinner", title: "Spaghetti bolognese with courgetti", kcal: 500, batch: "batch", gf: true, vegetarian: false, dairyFree: false,
     cuisine: "Italian", mainIngredient: "Beef",
     ingredients: [
       { text: "170g lean (5%) beef mince", cat: CATS.MEAT, q: "lean beef mince 5%" },
@@ -474,7 +475,7 @@ const MEALS = [
     tip: "A splash of balsamic vinegar stirred in at the end deepens the flavour without needing any wine or stock."
   },
   {
-    id: "d10", category: "dinner", title: "Aubergine & lentil lasagne (no béchamel)", kcal: 470, batch: "batch", gf: true,
+    id: "d10", category: "dinner", title: "Aubergine & lentil lasagne (no béchamel)", kcal: 470, batch: "batch", gf: true, vegetarian: true, dairyFree: false,
     cuisine: "Greek", mainIngredient: "Vegetarian",
     ingredients: [
       { text: "2 aubergines, sliced lengthways into 0.5cm strips", cat: CATS.VEG, q: "aubergine" },
@@ -500,7 +501,7 @@ const MEALS = [
     tip: "No béchamel here on purpose — the cinnamon in the ragù gives that same cosy warmth without a dairy sauce, and it reheats beautifully the next day. This one's fully vegetarian, so it's an easy batch to double."
   },
   {
-    id: "d11", category: "dinner", title: "Mild red Thai curry with chicken", kcal: 480, batch: "batch", gf: true,
+    id: "d11", category: "dinner", title: "Mild red Thai curry with chicken", kcal: 480, batch: "batch", gf: true, vegetarian: false, dairyFree: true,
     cuisine: "Thai", mainIngredient: "Chicken",
     ingredients: [
       { text: "200g chicken breast, sliced", cat: CATS.MEAT, q: "chicken breast" },
@@ -522,6 +523,246 @@ const MEALS = [
       "Finish with coriander or Thai basil."
     ],
     tip: "Go easy on the paste — most shop-bought red curry pastes bring plenty of background warmth without any extra heat needed. Keep chilli oil on the table for him if he wants more kick."
+  },
+
+  // ---------- SPANISH ----------
+  {
+    id: "d12", category: "dinner", title: "Spanish garlic prawns with white beans", kcal: 490, batch: "fresh", gf: true, vegetarian: false, dairyFree: true,
+    cuisine: "Spanish", mainIngredient: "Seafood",
+    ingredients: [
+      { text: "250g raw king prawns", cat: CATS.MEAT, q: "raw king prawns" },
+      { text: "3 garlic cloves, sliced", cat: CATS.VEG, q: "garlic" },
+      { text: "1/2 tsp sweet smoked paprika", cat: CATS.CUPBOARD, q: "smoked paprika" },
+      { text: "200g cannellini beans, drained", cat: CATS.CUPBOARD, q: "cannellini beans" },
+      { text: "100g cherry tomatoes, halved", cat: CATS.VEG, q: "cherry tomatoes" },
+      { text: "2 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1/2 lemon, juiced", cat: CATS.VEG, q: "lemon" },
+      { text: "fresh parsley, chopped", cat: CATS.VEG, q: "fresh parsley" }
+    ],
+    hisAdd: { text: "Warm gluten-containing crusty bread for mopping up the oil.", cat: CATS.HIS, q: "crusty bread" },
+    method: [
+      "Warm the oil gently in a pan and cook the garlic for 30 seconds — keep the heat low so it doesn't catch.",
+      "Stir in the smoked paprika, then add the beans and tomatoes and cook 3–4 minutes until the tomatoes soften.",
+      "Turn up the heat, add the prawns, and cook 2–3 minutes until just pink through.",
+      "Squeeze over the lemon juice and scatter with parsley."
+    ],
+    tip: "This is classic gambas al ajillo, gentled down — the smoked paprika gives warmth without any chilli. A splash of dry sherry (or a squeeze more lemon) added with the beans deepens it further."
+  },
+  {
+    id: "l5", category: "lunch", title: "Spanish-style tuna & potato salad", kcal: 445, batch: "batch", gf: true, vegetarian: false, dairyFree: true,
+    cuisine: "Spanish", mainIngredient: "Fish",
+    ingredients: [
+      { text: "145g tin tuna in spring water, drained", cat: CATS.CUPBOARD, q: "tuna in spring water" },
+      { text: "150g baby potatoes, boiled and cooled", cat: CATS.VEG, q: "baby potatoes" },
+      { text: "1 roasted red pepper (jarred is fine), sliced", cat: CATS.VEG, q: "roasted red peppers" },
+      { text: "6 pitted green olives, halved", cat: CATS.CUPBOARD, q: "green olives" },
+      { text: "2 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1 tsp red wine vinegar", cat: CATS.CUPBOARD, q: "red wine vinegar" },
+      { text: "1/4 red onion, thinly sliced", cat: CATS.VEG, q: "red onion" },
+      { text: "handful fresh parsley, chopped", cat: CATS.VEG, q: "fresh parsley" }
+    ],
+    method: [
+      "Halve the cooled potatoes and toss with the olive oil and vinegar while still slightly warm — they take on flavour better this way.",
+      "Flake in the tuna and add the pepper, olives and red onion.",
+      "Toss gently and finish with parsley."
+    ],
+    tip: "This is a lightened ensaladilla — good cold from the fridge for up to 3 days, so it batches well even though the potato content means it's a heavier lunch than most on the plan."
+  },
+  {
+    id: "br5", category: "brunch", title: "Spanish-style tortilla with peppers", kcal: 700, batch: "fresh", gf: true, vegetarian: true, dairyFree: false,
+    cuisine: "Spanish", mainIngredient: "Eggs",
+    ingredients: [
+      { text: "4 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "200g baby potatoes, thinly sliced", cat: CATS.VEG, q: "baby potatoes" },
+      { text: "1 red pepper, sliced", cat: CATS.VEG, q: "red pepper" },
+      { text: "1/2 onion, thinly sliced", cat: CATS.VEG, q: "onion" },
+      { text: "2 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "small handful mixed leaves, dressed with lemon", cat: CATS.VEG, q: "mixed salad leaves" },
+      { text: "25g manchego or hard cheese, shaved (optional)", cat: CATS.FRIDGE, q: "manchego cheese" }
+    ],
+    method: [
+      "Gently cook the potatoes, pepper and onion in the oil over low heat for 15 minutes, stirring occasionally, until soft but not coloured.",
+      "Whisk the eggs with a pinch of salt, then stir through the cooked vegetables.",
+      "Pour back into the pan and cook over low heat 6–8 minutes until mostly set, then finish under the grill 2–3 minutes until just set on top.",
+      "Rest 5 minutes, then slice into wedges and serve with the dressed leaves."
+    ],
+    tip: "Good at room temperature, not just hot — makes this an easy one to prep ahead of a lazy weekend brunch."
+  },
+
+  // ---------- MIDDLE EASTERN / LEBANESE ----------
+  {
+    id: "d13", category: "dinner", title: "Lebanese lemon garlic chicken with grilled vegetables", kcal: 495, batch: "batch", gf: true, vegetarian: false, dairyFree: true,
+    cuisine: "Middle Eastern", mainIngredient: "Chicken",
+    ingredients: [
+      { text: "200g chicken thigh fillets", cat: CATS.MEAT, q: "chicken thigh fillets" },
+      { text: "1/2 lemon, juiced", cat: CATS.VEG, q: "lemon" },
+      { text: "2 garlic cloves, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "1 tsp ground cumin", cat: CATS.CUPBOARD, q: "ground cumin" },
+      { text: "1/2 tsp ground allspice", cat: CATS.CUPBOARD, q: "ground allspice" },
+      { text: "1 courgette, sliced lengthways", cat: CATS.VEG, q: "courgette" },
+      { text: "1 red pepper, quartered", cat: CATS.VEG, q: "red pepper" },
+      { text: "1.5 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "fresh mint, chopped", cat: CATS.VEG, q: "fresh mint" }
+    ],
+    hisAdd: { text: "warm gluten-containing pitta or 150g cooked rice.", cat: CATS.HIS, q: "pitta bread" },
+    method: [
+      "Marinate the chicken in the lemon juice, garlic, cumin, allspice and half the oil for at least 20 minutes (or overnight).",
+      "Griddle or grill the chicken 6–7 minutes each side until charred and cooked through.",
+      "Toss the courgette and pepper in the remaining oil and griddle alongside, 3–4 minutes each side.",
+      "Scatter with mint and serve chicken and vegetables together."
+    ],
+    tip: "This is a shish-taouk-style marinade — the lemon and allspice combination is the whole flavour, no heat needed at all."
+  },
+  {
+    id: "l6", category: "lunch", title: "Lebanese lentil & mint salad bowl", kcal: 420, batch: "batch", gf: true, vegetarian: true, dairyFree: false,
+    cuisine: "Middle Eastern", mainIngredient: "Vegetarian",
+    ingredients: [
+      { text: "150g cooked green lentils (tinned is fine)", cat: CATS.CUPBOARD, q: "tinned lentils" },
+      { text: "1/2 cucumber, diced", cat: CATS.VEG, q: "cucumber" },
+      { text: "1 tomato, diced", cat: CATS.VEG, q: "tomato" },
+      { text: "1/4 red onion, finely diced", cat: CATS.VEG, q: "red onion" },
+      { text: "fresh mint and parsley, chopped", cat: CATS.VEG, q: "fresh mint" },
+      { text: "1 tbsp tahini, thinned with lemon and water", cat: CATS.CUPBOARD, q: "tahini" },
+      { text: "1/2 lemon, juiced", cat: CATS.VEG, q: "lemon" },
+      { text: "30g feta, crumbled", cat: CATS.FRIDGE, q: "feta cheese" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" }
+    ],
+    method: [
+      "Toss the lentils, cucumber, tomato and red onion together.",
+      "Whisk the tahini with the lemon juice and a splash of water until drizzle consistency.",
+      "Dress the salad, scatter with the herbs and feta, and finish with a drizzle of olive oil."
+    ],
+    tip: "No cooking needed if you use tinned lentils — this is another easy no-cook batch lunch alongside the tuna & white bean salad."
+  },
+  {
+    id: "bf5", category: "breakfast", title: "Labneh-style yogurt with za'atar & olive oil", kcal: 305, batch: "fresh", gf: true, vegetarian: true, dairyFree: false,
+    cuisine: "Middle Eastern", mainIngredient: "Vegetarian",
+    ingredients: [
+      { text: "200g thick Greek yogurt", cat: CATS.FRIDGE, q: "Greek yogurt" },
+      { text: "1 tsp za'atar (check label for gluten-free)", cat: CATS.CUPBOARD, q: "zaatar" },
+      { text: "1.5 tsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1/2 cucumber, sliced, to serve", cat: CATS.VEG, q: "cucumber" },
+      { text: "small handful cherry tomatoes, to serve", cat: CATS.VEG, q: "cherry tomatoes" }
+    ],
+    method: [
+      "Spoon the yogurt onto a plate or shallow bowl and spread slightly.",
+      "Scatter the za'atar over and drizzle with the olive oil.",
+      "Serve with the cucumber and tomatoes alongside."
+    ],
+    tip: "Genuinely a 2-minute breakfast — good za'atar (thyme, sumac, sesame) is worth seeking out, it does all the work here."
+  },
+
+  // ---------- MEXICAN ----------
+  {
+    id: "d14", category: "dinner", title: "Chicken fajita bowl with cauliflower rice", kcal: 485, batch: "fresh", gf: true, vegetarian: false, dairyFree: true,
+    cuisine: "Mexican", mainIngredient: "Chicken",
+    ingredients: [
+      { text: "200g chicken breast, sliced into strips", cat: CATS.MEAT, q: "chicken breast" },
+      { text: "1 red pepper, sliced", cat: CATS.VEG, q: "red pepper" },
+      { text: "1 green pepper, sliced", cat: CATS.VEG, q: "green pepper" },
+      { text: "1/2 onion, sliced", cat: CATS.VEG, q: "onion" },
+      { text: "1 tsp ground cumin", cat: CATS.CUPBOARD, q: "ground cumin" },
+      { text: "1/2 tsp smoked paprika", cat: CATS.CUPBOARD, q: "smoked paprika" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1 lime, juiced", cat: CATS.VEG, q: "lime" },
+      { text: "150g cauliflower rice", cat: CATS.VEG, q: "cauliflower rice" },
+      { text: "1/4 avocado, sliced", cat: CATS.VEG, q: "avocado" },
+      { text: "fresh coriander, to finish", cat: CATS.VEG, q: "fresh coriander" }
+    ],
+    hisAdd: { text: "2 warm gluten-containing tortilla wraps or 150g cooked rice.", cat: CATS.HIS, q: "flour tortillas" },
+    method: [
+      "Toss the chicken with the cumin, paprika and half the oil.",
+      "Heat the remaining oil in a large pan and stir-fry the peppers and onion 4–5 minutes until just softened.",
+      "Push the vegetables aside, add the chicken, and cook 5–6 minutes until cooked through, then toss everything together.",
+      "Warm the cauliflower rice through, squeeze over the lime juice, and serve topped with avocado and coriander."
+    ],
+    tip: "Mild by design — put hot sauce or pickled jalapeños on the table for anyone who wants heat rather than cooking it in."
+  },
+  {
+    id: "l7", category: "lunch", title: "Mexican-style black bean & lime chicken salad", kcal: 460, batch: "batch", gf: true, vegetarian: false, dairyFree: true,
+    cuisine: "Mexican", mainIngredient: "Chicken",
+    ingredients: [
+      { text: "120g cooked chicken breast, shredded", cat: CATS.MEAT, q: "chicken breast" },
+      { text: "120g black beans, drained and rinsed", cat: CATS.CUPBOARD, q: "black beans" },
+      { text: "80g sweetcorn", cat: CATS.VEG, q: "sweetcorn" },
+      { text: "1/2 red pepper, diced", cat: CATS.VEG, q: "red pepper" },
+      { text: "1/4 red onion, finely diced", cat: CATS.VEG, q: "red onion" },
+      { text: "1 lime, juiced", cat: CATS.VEG, q: "lime" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "fresh coriander, chopped", cat: CATS.VEG, q: "fresh coriander" },
+      { text: "1/4 avocado, sliced", cat: CATS.VEG, q: "avocado" }
+    ],
+    method: [
+      "Toss the beans, sweetcorn, pepper and red onion together.",
+      "Whisk the lime juice and oil, toss through the salad, then add the shredded chicken.",
+      "Top with avocado and coriander."
+    ],
+    tip: "Grill extra chicken breasts alongside another recipe in the week and shred them for this — makes the whole thing a 5-minute assembly job."
+  },
+  {
+    id: "bf6", category: "breakfast", title: "Mexican-style egg scramble with black beans", kcal: 325, batch: "fresh", gf: true, vegetarian: true, dairyFree: true,
+    cuisine: "Mexican", mainIngredient: "Eggs",
+    ingredients: [
+      { text: "2 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
+      { text: "60g black beans, drained and rinsed", cat: CATS.CUPBOARD, q: "black beans" },
+      { text: "1 small tomato, diced", cat: CATS.VEG, q: "tomato" },
+      { text: "1/4 red onion, finely diced", cat: CATS.VEG, q: "red onion" },
+      { text: "2 tsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1/4 avocado, sliced", cat: CATS.VEG, q: "avocado" },
+      { text: "fresh coriander, to finish", cat: CATS.VEG, q: "fresh coriander" }
+    ],
+    method: [
+      "Warm the oil and soften the onion for 2 minutes, then add the tomato and black beans and cook 2 minutes more.",
+      "Whisk the eggs and pour in, scrambling gently until just set.",
+      "Top with avocado and coriander."
+    ],
+    tip: "A pinch of ground cumin stirred in with the beans adds warmth without any heat — keep hot sauce on the side for anyone who wants it."
+  },
+
+  // ---------- JAPANESE ----------
+  {
+    id: "d15", category: "dinner", title: "Teriyaki-style salmon with sesame greens", kcal: 510, batch: "fresh", gf: true, vegetarian: false, dairyFree: true,
+    cuisine: "Japanese", mainIngredient: "Fish",
+    ingredients: [
+      { text: "180g salmon fillet", cat: CATS.MEAT, q: "salmon fillet" },
+      { text: "1.5 tbsp gluten-free tamari", cat: CATS.CUPBOARD, q: "gluten free tamari" },
+      { text: "1 tsp honey", cat: CATS.CUPBOARD, q: "honey" },
+      { text: "1 tsp grated ginger", cat: CATS.VEG, q: "fresh ginger" },
+      { text: "1 garlic clove, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "150g pak choi or tenderstem broccoli", cat: CATS.VEG, q: "pak choi" },
+      { text: "1 tsp sesame oil", cat: CATS.CUPBOARD, q: "sesame oil" },
+      { text: "1 tsp sesame seeds", cat: CATS.CUPBOARD, q: "sesame seeds" },
+      { text: "100g cauliflower rice", cat: CATS.VEG, q: "cauliflower rice" }
+    ],
+    hisAdd: { text: "150g cooked jasmine or sushi rice.", cat: CATS.HIS, q: "sushi rice" },
+    method: [
+      "Whisk the tamari, honey, ginger and garlic together and marinate the salmon 10–15 minutes.",
+      "Pan-fry or grill the salmon 3–4 minutes skin-side down, then flip and cook 2–3 minutes more, brushing with the marinade as it cooks.",
+      "Steam the pak choi and toss with the sesame oil and seeds.",
+      "Warm the cauliflower rice through and serve everything together."
+    ],
+    tip: "Check your tamari and honey brands are gluten-free — most tamari is, but soy sauce usually isn't. A little extra ginger grated over at the end brightens the whole dish."
+  },
+  {
+    id: "l8", category: "lunch", title: "Japanese-style sesame ginger chicken & edamame salad", kcal: 440, batch: "batch", gf: true, vegetarian: false, dairyFree: true,
+    cuisine: "Japanese", mainIngredient: "Chicken",
+    ingredients: [
+      { text: "120g cooked chicken breast, sliced", cat: CATS.MEAT, q: "chicken breast" },
+      { text: "80g edamame beans, cooked", cat: CATS.VEG, q: "edamame beans" },
+      { text: "1/2 cucumber, ribboned", cat: CATS.VEG, q: "cucumber" },
+      { text: "1 carrot, ribboned", cat: CATS.VEG, q: "carrot" },
+      { text: "1 tbsp gluten-free tamari", cat: CATS.CUPBOARD, q: "gluten free tamari" },
+      { text: "1 tsp sesame oil", cat: CATS.CUPBOARD, q: "sesame oil" },
+      { text: "1 tsp rice vinegar", cat: CATS.CUPBOARD, q: "rice vinegar" },
+      { text: "1 tsp grated ginger", cat: CATS.VEG, q: "fresh ginger" },
+      { text: "1 tsp sesame seeds", cat: CATS.CUPBOARD, q: "sesame seeds" }
+    ],
+    method: [
+      "Whisk the tamari, sesame oil, rice vinegar and ginger together.",
+      "Toss the cucumber, carrot and edamame with the dressing.",
+      "Top with the sliced chicken and scatter with sesame seeds."
+    ],
+    tip: "No cooking needed if the chicken and edamame are already cooked — another good grab-from-the-fridge lunch."
   }
 ];
 
