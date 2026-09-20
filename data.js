@@ -1,7 +1,9 @@
 /* ==========================================================================
    Two Plates, One Table — meal pool data
    Add a new meal any time by copying an existing object into MEALS below.
-   category: "breakfast" | "brunch" | "lunch" | "dinner"
+   category: "breakfast" | "brunch" | "lunch" | "dinner" — which slot it can fill
+   cuisine: a broad flavour family, used as a browse/filter facet
+   mainIngredient: the headline ingredient, used as a second browse/filter facet
    Each ingredient: { text: "shown in the recipe", cat: shopping category, q: short Ocado search term }
    Dinners carry hisAdd: { text, cat, q } for the partner's carb side.
    ========================================================================== */
@@ -18,6 +20,7 @@ const MEALS = [
   // ---------- BREAKFASTS ----------
   {
     id: "bf1", category: "breakfast", title: "Greek yogurt, berries & chia", kcal: 320, batch: "fresh", gf: true,
+    cuisine: "Everyday", mainIngredient: "Vegetarian",
     ingredients: [
       { text: "200g 0% or 2% Greek yogurt", cat: CATS.FRIDGE, q: "Greek yogurt" },
       { text: "100g mixed berries (fresh or frozen, defrosted)", cat: CATS.VEG, q: "mixed berries" },
@@ -34,6 +37,7 @@ const MEALS = [
   },
   {
     id: "bf2", category: "breakfast", title: "Veggie omelette with spinach & tomato", kcal: 310, batch: "fresh", gf: true,
+    cuisine: "Everyday", mainIngredient: "Eggs",
     ingredients: [
       { text: "2 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
       { text: "handful spinach", cat: CATS.VEG, q: "spinach" },
@@ -51,6 +55,7 @@ const MEALS = [
   },
   {
     id: "bf3", category: "breakfast", title: "Gluten-free overnight oats with berries", kcal: 315, batch: "batch", gf: true,
+    cuisine: "Everyday", mainIngredient: "Vegetarian",
     ingredients: [
       { text: "45g certified gluten-free oats", cat: CATS.CUPBOARD, q: "gluten free oats" },
       { text: "150ml semi-skimmed milk (or a milk of your choice)", cat: CATS.FRIDGE, q: "semi skimmed milk" },
@@ -67,6 +72,7 @@ const MEALS = [
   },
   {
     id: "bf4", category: "breakfast", title: "Cottage cheese with fruit & walnuts", kcal: 310, batch: "fresh", gf: true,
+    cuisine: "Everyday", mainIngredient: "Vegetarian",
     ingredients: [
       { text: "200g cottage cheese", cat: CATS.FRIDGE, q: "cottage cheese" },
       { text: "120g peach, pineapple or nectarine, sliced", cat: CATS.VEG, q: "peach" },
@@ -84,6 +90,7 @@ const MEALS = [
   // ---------- BRUNCHES ----------
   {
     id: "br1", category: "brunch", title: "Eggs, baked beans & grilled tomato", kcal: 730, batch: "fresh", gf: true,
+    cuisine: "British", mainIngredient: "Eggs",
     ingredients: [
       { text: "2 eggs, fried or poached", cat: CATS.FRIDGE, q: "free range eggs" },
       { text: "250g reduced-sugar, reduced-salt baked beans (check label — most major brands are gluten-free, but confirm)", cat: CATS.CUPBOARD, q: "reduced sugar baked beans" },
@@ -102,6 +109,7 @@ const MEALS = [
   },
   {
     id: "br2", category: "brunch", title: "Smoked salmon, poached egg & avocado", kcal: 750, batch: "fresh", gf: true,
+    cuisine: "British", mainIngredient: "Fish",
     ingredients: [
       { text: "100g smoked salmon", cat: CATS.MEAT, q: "smoked salmon" },
       { text: "2 eggs, poached", cat: CATS.FRIDGE, q: "free range eggs" },
@@ -119,6 +127,7 @@ const MEALS = [
   },
   {
     id: "br3", category: "brunch", title: "Mediterranean baked eggs (mild)", kcal: 720, batch: "fresh", gf: true,
+    cuisine: "Mediterranean", mainIngredient: "Eggs",
     ingredients: [
       { text: "2 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
       { text: "250g passata or chopped tomatoes", cat: CATS.CUPBOARD, q: "passata" },
@@ -141,6 +150,7 @@ const MEALS = [
   },
   {
     id: "br4", category: "brunch", title: "Turkish-style breakfast plate", kcal: 720, batch: "fresh", gf: true,
+    cuisine: "Turkish", mainIngredient: "Eggs",
     ingredients: [
       { text: "2 eggs, soft-boiled or fried", cat: CATS.FRIDGE, q: "free range eggs" },
       { text: "40g feta, sliced", cat: CATS.FRIDGE, q: "feta cheese" },
@@ -163,6 +173,7 @@ const MEALS = [
   // ---------- LUNCHES ----------
   {
     id: "l1", category: "lunch", title: "Baked lemon salmon, sweet potato & greens", kcal: 450, batch: "batch", gf: true,
+    cuisine: "Mediterranean", mainIngredient: "Fish",
     ingredients: [
       { text: "130g salmon fillet", cat: CATS.MEAT, q: "salmon fillet" },
       { text: "160g sweet potato, cut into small cubes", cat: CATS.VEG, q: "sweet potato" },
@@ -181,6 +192,7 @@ const MEALS = [
   },
   {
     id: "l2", category: "lunch", title: "Greek-style chicken & chickpea salad", kcal: 470, batch: "batch", gf: true,
+    cuisine: "Greek", mainIngredient: "Chicken",
     ingredients: [
       { text: "120g chicken breast", cat: CATS.MEAT, q: "chicken breast" },
       { text: "1 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
@@ -203,6 +215,7 @@ const MEALS = [
   },
   {
     id: "l3", category: "lunch", title: "Tuna & white bean salad", kcal: 430, batch: "batch", gf: true,
+    cuisine: "Mediterranean", mainIngredient: "Fish",
     ingredients: [
       { text: "145g tin tuna in spring water, drained", cat: CATS.CUPBOARD, q: "tuna in spring water" },
       { text: "120g cannellini beans, drained and rinsed", cat: CATS.CUPBOARD, q: "cannellini beans" },
@@ -223,6 +236,7 @@ const MEALS = [
   },
   {
     id: "l4", category: "lunch", title: "Mediterranean spinach & feta frittata", kcal: 455, batch: "batch", gf: true,
+    cuisine: "Mediterranean", mainIngredient: "Eggs",
     ingredients: [
       { text: "3 eggs", cat: CATS.FRIDGE, q: "free range eggs" },
       { text: "handful spinach, roughly chopped", cat: CATS.VEG, q: "spinach" },
@@ -244,6 +258,7 @@ const MEALS = [
   // ---------- DINNERS (shared) ----------
   {
     id: "d1", category: "dinner", title: "Steak, garlic butter mushrooms & broccoli", kcal: 535, batch: "fresh", gf: true,
+    cuisine: "British", mainIngredient: "Beef",
     ingredients: [
       { text: "180g lean sirloin or rump steak", cat: CATS.MEAT, q: "sirloin steak" },
       { text: "150g chestnut mushrooms, sliced", cat: CATS.VEG, q: "chestnut mushrooms" },
@@ -265,6 +280,7 @@ const MEALS = [
   },
   {
     id: "d2", category: "dinner", title: "Mediterranean baked chicken thighs", kcal: 500, batch: "batch", gf: true,
+    cuisine: "Mediterranean", mainIngredient: "Chicken",
     ingredients: [
       { text: "2 boneless, skinless chicken thighs (about 170g)", cat: CATS.MEAT, q: "chicken thighs" },
       { text: "6 Kalamata olives", cat: CATS.CUPBOARD, q: "kalamata olives" },
@@ -286,6 +302,7 @@ const MEALS = [
   },
   {
     id: "d3", category: "dinner", title: "Pan-seared cod with Mediterranean roasted vegetables", kcal: 515, batch: "fresh", gf: true,
+    cuisine: "Mediterranean", mainIngredient: "Fish",
     ingredients: [
       { text: "220g cod loin (or another firm white fish)", cat: CATS.MEAT, q: "cod loin" },
       { text: "100g cherry tomatoes, halved", cat: CATS.VEG, q: "cherry tomatoes" },
@@ -307,6 +324,7 @@ const MEALS = [
   },
   {
     id: "d4", category: "dinner", title: "Turkey meatballs in tomato-basil sauce with courgetti", kcal: 540, batch: "batch", gf: true,
+    cuisine: "Italian", mainIngredient: "Turkey",
     ingredients: [
       { text: "180g turkey mince", cat: CATS.MEAT, q: "turkey mince" },
       { text: "1 garlic clove, crushed", cat: CATS.VEG, q: "garlic" },
@@ -331,6 +349,7 @@ const MEALS = [
   },
   {
     id: "d5", category: "dinner", title: "Greek-style beef koftas with tzatziki", kcal: 525, batch: "batch", gf: true,
+    cuisine: "Greek", mainIngredient: "Beef",
     ingredients: [
       { text: "170g lean (5%) beef mince", cat: CATS.MEAT, q: "lean beef mince 5%" },
       { text: "1/2 tsp ground cumin", cat: CATS.CUPBOARD, q: "ground cumin" },
@@ -355,6 +374,7 @@ const MEALS = [
   },
   {
     id: "d6", category: "dinner", title: "Garlic prawn & tomato skillet with courgette noodles", kcal: 520, batch: "fresh", gf: true,
+    cuisine: "Mediterranean", mainIngredient: "Seafood",
     ingredients: [
       { text: "280g raw king prawns", cat: CATS.MEAT, q: "raw king prawns" },
       { text: "2 garlic cloves, sliced", cat: CATS.VEG, q: "garlic" },
@@ -378,6 +398,7 @@ const MEALS = [
   },
   {
     id: "d7", category: "dinner", title: "Herb & lemon roast chicken with ratatouille", kcal: 505, batch: "batch", gf: true,
+    cuisine: "Mediterranean", mainIngredient: "Chicken",
     ingredients: [
       { text: "220g chicken breast", cat: CATS.MEAT, q: "chicken breast" },
       { text: "1/2 lemon, juiced and zested", cat: CATS.VEG, q: "lemon" },
@@ -400,6 +421,107 @@ const MEALS = [
       "Serve the chicken over the ratatouille with the green beans alongside."
     ],
     tip: "Ratatouille genuinely improves after a day in the fridge — make the full batch and a later repeat will taste even better than the first."
+  },
+  {
+    id: "d8", category: "dinner", title: "Beef & courgette lasagne", kcal: 520, batch: "batch", gf: true,
+    cuisine: "Italian", mainIngredient: "Beef",
+    ingredients: [
+      { text: "150g lean (5%) beef mince", cat: CATS.MEAT, q: "lean beef mince 5%" },
+      { text: "1/2 onion, diced", cat: CATS.VEG, q: "onion" },
+      { text: "1 carrot, diced", cat: CATS.VEG, q: "carrot" },
+      { text: "2 garlic cloves, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "400g chopped tomatoes", cat: CATS.CUPBOARD, q: "chopped tomatoes" },
+      { text: "1 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
+      { text: "1 tsp dried basil", cat: CATS.CUPBOARD, q: "dried basil" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "1 large courgette, sliced lengthways into thin ribbons", cat: CATS.VEG, q: "courgette" },
+      { text: "30g mozzarella or cheddar, grated", cat: CATS.FRIDGE, q: "grated mozzarella" },
+      { text: "fresh basil, to finish", cat: CATS.VEG, q: "fresh basil" }
+    ],
+    hisAdd: { text: "4–5 dried gluten-containing lasagne sheets, cooked and layered in place of the courgette — or garlic bread on the side.", cat: CATS.HIS, q: "lasagne sheets" },
+    method: [
+      "Heat the oil in a pan and soften the onion and carrot for 5–6 minutes, then add the garlic and cook 1 minute more.",
+      "Add the mince and brown for 5 minutes, breaking it up, then stir in the chopped tomatoes, oregano and basil. Simmer 20 minutes until rich and thickened.",
+      "Meanwhile, salt the courgette ribbons and leave for 10 minutes to draw out excess moisture, then pat dry — this stops the lasagne turning watery.",
+      "In a small ovenproof dish, layer the ragù and courgette ribbons two or three times, finishing with ragù. Scatter the cheese over the top.",
+      "Bake at 190°C (fan 170°C) for 20–25 minutes until bubbling and the cheese is golden. Rest 5 minutes before serving."
+    ],
+    tip: "A layer of fresh basil between the courgette and the ragù keeps every bite tasting bright rather than heavy — a few anchovy fillets stirred into the ragù add a deep savoury note if you like."
+  },
+  {
+    id: "d9", category: "dinner", title: "Spaghetti bolognese with courgetti", kcal: 500, batch: "batch", gf: true,
+    cuisine: "Italian", mainIngredient: "Beef",
+    ingredients: [
+      { text: "170g lean (5%) beef mince", cat: CATS.MEAT, q: "lean beef mince 5%" },
+      { text: "1/2 onion, diced", cat: CATS.VEG, q: "onion" },
+      { text: "1 carrot, diced", cat: CATS.VEG, q: "carrot" },
+      { text: "1 garlic clove, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "300g passata", cat: CATS.CUPBOARD, q: "passata" },
+      { text: "1 tbsp tomato purée", cat: CATS.CUPBOARD, q: "tomato puree" },
+      { text: "1 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
+      { text: "1 tbsp olive oil", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "200g courgette, spiralised", cat: CATS.VEG, q: "courgette" },
+      { text: "fresh basil, to finish", cat: CATS.VEG, q: "fresh basil" },
+      { text: "shaved hard cheese, optional", cat: CATS.FRIDGE, q: "parmesan" }
+    ],
+    hisAdd: { text: "100g gluten-containing spaghetti, cooked and tossed through the same sauce.", cat: CATS.HIS, q: "spaghetti" },
+    method: [
+      "Heat the oil in a pan and soften the onion and carrot for 5–6 minutes, then add the garlic and cook 1 minute more.",
+      "Add the mince and brown for 5 minutes, then stir in the passata, tomato purée and oregano. Simmer 20–25 minutes, covered, stirring occasionally, until rich and thick.",
+      "In the last 2 minutes, warm the courgetti through in a splash of the sauce, or serve it raw underneath if you prefer more bite.",
+      "Finish with basil and a little shaved cheese if using."
+    ],
+    tip: "A splash of balsamic vinegar stirred in at the end deepens the flavour without needing any wine or stock."
+  },
+  {
+    id: "d10", category: "dinner", title: "Aubergine & lentil lasagne (no béchamel)", kcal: 470, batch: "batch", gf: true,
+    cuisine: "Greek", mainIngredient: "Vegetarian",
+    ingredients: [
+      { text: "2 aubergines, sliced lengthways into 0.5cm strips", cat: CATS.VEG, q: "aubergine" },
+      { text: "2 tins green or brown lentils, drained (about 400g)", cat: CATS.CUPBOARD, q: "tinned lentils" },
+      { text: "1 onion, diced", cat: CATS.VEG, q: "onion" },
+      { text: "2 garlic cloves, crushed", cat: CATS.VEG, q: "garlic" },
+      { text: "400g chopped tomatoes", cat: CATS.CUPBOARD, q: "chopped tomatoes" },
+      { text: "1 tsp dried oregano", cat: CATS.CUPBOARD, q: "dried oregano" },
+      { text: "1/2 tsp ground cinnamon", cat: CATS.CUPBOARD, q: "ground cinnamon" },
+      { text: "2 tbsp olive oil, plus extra for brushing", cat: CATS.CUPBOARD, q: "olive oil" },
+      { text: "25g feta, crumbled", cat: CATS.FRIDGE, q: "feta cheese" },
+      { text: "fresh parsley, to finish", cat: CATS.VEG, q: "fresh parsley" }
+    ],
+    hisAdd: { text: "warm gluten-containing flatbread or crusty bread on the side.", cat: CATS.HIS, q: "flatbread" },
+    method: [
+      "Brush the aubergine slices with a little olive oil and grill or griddle 3–4 minutes each side until charred and tender. Set aside.",
+      "Heat the remaining oil in a pan, soften the onion for 5–6 minutes, then add the garlic and cinnamon and cook 1 minute more.",
+      "Stir in the lentils, chopped tomatoes and oregano. Simmer 12–15 minutes until thickened.",
+      "Layer the aubergine and lentil ragù in a small ovenproof dish, finishing with a layer of aubergine.",
+      "Scatter feta over the top and bake at 190°C (fan 170°C) for 15 minutes until lightly golden.",
+      "Finish with parsley."
+    ],
+    tip: "No béchamel here on purpose — the cinnamon in the ragù gives that same cosy warmth without a dairy sauce, and it reheats beautifully the next day. This one's fully vegetarian, so it's an easy batch to double."
+  },
+  {
+    id: "d11", category: "dinner", title: "Mild red Thai curry with chicken", kcal: 480, batch: "batch", gf: true,
+    cuisine: "Thai", mainIngredient: "Chicken",
+    ingredients: [
+      { text: "200g chicken breast, sliced", cat: CATS.MEAT, q: "chicken breast" },
+      { text: "1 tbsp red Thai curry paste (check label for gluten-free)", cat: CATS.CUPBOARD, q: "red thai curry paste" },
+      { text: "160ml light coconut milk", cat: CATS.CUPBOARD, q: "light coconut milk" },
+      { text: "1 tsp fish sauce (check gluten-free)", cat: CATS.CUPBOARD, q: "fish sauce" },
+      { text: "100g mangetout or green beans", cat: CATS.VEG, q: "mangetout" },
+      { text: "100g cauliflower rice", cat: CATS.VEG, q: "cauliflower rice" },
+      { text: "1/2 lime, juiced", cat: CATS.VEG, q: "lime" },
+      { text: "fresh coriander or Thai basil, to finish", cat: CATS.VEG, q: "fresh coriander" }
+    ],
+    hisAdd: { text: "150g cooked jasmine rice.", cat: CATS.HIS, q: "jasmine rice" },
+    method: [
+      "Fry the curry paste in a dry pan for 1 minute until fragrant — this mellows the flavour rather than tasting raw.",
+      "Add the chicken and cook 3–4 minutes until it starts to colour.",
+      "Pour in the coconut milk and fish sauce, bring to a gentle simmer, and cook 8–10 minutes until the chicken is cooked through.",
+      "Add the mangetout or green beans for the final 3–4 minutes.",
+      "Stir through the lime juice and warm the cauliflower rice through (a few minutes in a dry pan, or from the packet).",
+      "Finish with coriander or Thai basil."
+    ],
+    tip: "Go easy on the paste — most shop-bought red curry pastes bring plenty of background warmth without any extra heat needed. Keep chilli oil on the table for him if he wants more kick."
   }
 ];
 
@@ -434,7 +556,8 @@ const PANTRY = [
   { name: "Tahini", note: "thin with lemon and water for an instant Mediterranean drizzle sauce over almost anything.", q: "tahini" },
   { name: "Chilli flakes, kept separate", note: "so your partner can add heat to his own plate without any dish being spicy for you.", q: "chilli flakes" },
   { name: "Gluten-free stock cubes or bouillon", note: "some standard stock cubes contain barley — look for a certified gluten-free one.", q: "gluten free stock cubes" },
-  { name: "Flaky sea salt & cracked black pepper", note: "season at the end as well as during cooking — it makes a bigger difference than any single condiment.", q: "flaky sea salt" }
+  { name: "Flaky sea salt & cracked black pepper", note: "season at the end as well as during cooking — it makes a bigger difference than any single condiment.", q: "flaky sea salt" },
+  { name: "Mild red Thai curry paste & light coconut milk", note: "for the Thai curry — go easy on the paste to keep it mild, and check the paste label for gluten.", q: "red thai curry paste" }
 ];
 
 const SLOT_LABELS = { breakfast: "Breakfast", brunch: "Brunch", lunch: "Lunch", dinner: "Dinner" };
