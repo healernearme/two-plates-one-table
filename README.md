@@ -6,19 +6,28 @@ It's a plain static site (HTML/CSS/JS, no build step), hosted free on GitHub Pag
 
 ## Turn on syncing (optional, ~3 minutes)
 
-Without this step, the site still works fully — it just remembers your picks and ticks on whichever device you're using, separately for each device. To make you and your partner see the same plan everywhere, it stores its state in a Google Sheet you own, using a small free script as the bridge.
+Without this step, the site still works fully — it just remembers your picks and ticks on whichever device you're using, separately for each device. To make you and your partner see the same plan everywhere, it stores its state in a free Firebase Realtime Database you own — no server code to write or deploy, just a URL you paste in.
 
-1. Go to [sheets.google.com](https://sheets.google.com) and create a new blank spreadsheet — call it whatever you like, e.g. "Meal Planner Sync".
-2. In the sheet, go to **Extensions → Apps Script**.
-3. Delete the placeholder code and paste in the contents of [`apps-script/Code.gs`](apps-script/Code.gs) from this repo.
-4. Click **Deploy → New deployment**. For "Select type", choose **Web app**.
-5. Set **Execute as: Me**, and **Who has access: Anyone**. Click **Deploy**.
-6. Google will ask you to authorise the script the first time — that's expected, it's your own script running in your own account.
-7. Copy the **Web app URL** it gives you (ends in `/exec`).
-8. Back in this repo on GitHub, open `config.js`, replace the empty `""` with your URL (`const SYNC_URL = "https://script.google.com/macros/s/.../exec";`), and commit the change directly in GitHub's web editor — no git needed.
-9. Reload the site — the note under the tabs should say "Synced ✓".
+1. Go to [console.firebase.google.com](https://console.firebase.google.com) and sign in with any Google account — only you need one, your partner doesn't need an account at all.
+2. Click **Add project**, give it any name (e.g. "meal-planner-sync"), and finish the setup wizard — you can skip Google Analytics.
+3. In the left sidebar, go to **Build → Realtime Database → Create Database**. Pick any region and start in **test mode**.
+4. Once it's created, open the **Rules** tab and replace the rules with:
+   ```json
+   {
+     "rules": {
+       ".read": true,
+       ".write": true
+     }
+   }
+   ```
+   Click **Publish**. This makes the database reachable by anyone who has its URL — the same trust model as the site itself, since that URL is never shared or indexed anywhere.
+5. Back on the **Data** tab, copy the URL shown at the top (something like `https://meal-planner-sync-default-rtdb.europe-west1.firebasedatabase.app`) — that's your database URL.
+6. Back in this repo on GitHub, open `config.js`, replace the empty `""` with your URL (`const SYNC_URL = "https://your-project-default-rtdb.firebaseio.com";`, no trailing slash), and commit the change directly in GitHub's web editor — no git needed.
+7. Reload the site — the note under the tabs should say "Synced ✓".
 
 Both of you open the same site URL; there's nothing for your partner to install or sign up for.
+
+*(An older version of this site used a Google Sheet + Apps Script for syncing instead — `apps-script/Code.gs` is still in this repo for reference, but Firebase above is simpler and is what `sync.js` talks to now.)*
 
 ## Adding or editing meals
 
