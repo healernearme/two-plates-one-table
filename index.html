@@ -25,7 +25,7 @@
     <div class="rule-card"><div class="k">Evenings</div><div class="v">Same dinner, split at the plate — <b>no starchy carb for you</b>, his side stays on</div></div>
     <div class="rule-card"><div class="k">Your diet</div><div class="v"><b>Gluten-free</b> throughout — check labels on stock, mustard, oats, bread</div></div>
     <div class="rule-card"><div class="k">His diet</div><div class="v"><b>Dairy-free except butter</b> — feta, yogurt &amp; cream are swapped or left off his plate</div></div>
-    <div class="rule-card"><div class="k">The pool</div><div class="v">Tap <b>Swap</b> on any meal to pick something else from the recipe pool</div></div>
+    <div class="rule-card"><div class="k">The pool</div><div class="v">Tap <b>Choose meal</b> on any slot to browse the whole pool by cuisine or main ingredient</div></div>
     <div class="rule-card"><div class="k">Shopping</div><div class="v">Rebuilt live from whatever's currently planned, with one-tap <b>Ocado</b> search links</div></div>
   </div>
 
@@ -45,10 +45,12 @@
   <section class="panel" id="panel-recipes">
     <div class="callout">
       <h4>The full meal pool</h4>
-      Every recipe used anywhere in the planner lives here — browse by type or search by name/ingredient. Quantities and calories are <b>your portion</b>. Where dinner is shared, a lilac box shows what to add to his plate. <b>Batch</b> freezes and reheats well; <b>fresh</b> is best cooked the same day. Every ingredient has a one-tap Ocado search link — there's no official Ocado ordering API for personal projects, so this opens their search results for that item rather than adding it straight to a basket.
+      Every recipe used anywhere in the planner lives here — browse by type, cuisine or main ingredient, or search by name/ingredient. Quantities and calories are <b>your portion</b>. Where dinner is shared, a lilac box shows what to add to his plate. <b>Batch</b> freezes and reheats well; <b>fresh</b> is best cooked the same day. Every ingredient has a one-tap Ocado search link — there's no official Ocado ordering API for personal projects, so this opens their search results for that item rather than adding it straight to a basket.
     </div>
     <input class="recipe-search" placeholder="Search recipes or ingredients…" oninput="onRecipeSearch(this)">
     <div class="filter-row" id="recipe-filters"></div>
+    <div class="facet-row"><span class="facet-label">Cuisine</span><div class="picker-chips" id="recipe-cuisine-filters"></div></div>
+    <div class="facet-row"><span class="facet-label">Main ingredient</span><div class="picker-chips" id="recipe-ingredient-filters"></div></div>
     <div id="recipes-root"></div>
   </section>
 
