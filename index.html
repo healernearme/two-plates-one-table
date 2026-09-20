@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Two Plates, One Table</title>
 <meta name="description" content="A shared meal planner: pick from a pool of gluten-free, Mediterranean-flavoured meals, get an auto-built shopping list with Ocado search links, and keep it in sync across devices.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫒</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥒</text></svg>">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,13 +21,15 @@
   </header>
 
   <div class="rules">
-    <div class="rule-card"><div class="k">Daily target</div><div class="v"><b>~1,300 kcal</b> for you, breakfast + lunch + dinner every day — swap in a brunch from the pool if you fancy one instead</div></div>
-    <div class="rule-card"><div class="k">Evenings</div><div class="v">Same dinner, split at the plate — <b>no starchy carb for you</b>, his side stays on</div></div>
-    <div class="rule-card"><div class="k">Your diet</div><div class="v"><b>Gluten-free</b> throughout — check labels on stock, mustard, oats, bread</div></div>
-    <div class="rule-card"><div class="k">His diet</div><div class="v"><b>Dairy-free except butter</b> — feta, yogurt &amp; cream are swapped or left off his plate</div></div>
+    <div class="rule-card"><div class="k">Daily target</div><div class="v" id="rule-target"><b>~1,300 kcal</b> for you, breakfast + lunch + dinner every day — swap in a brunch from the pool if you fancy one instead</div></div>
+    <div class="rule-card"><div class="k">Evenings</div><div class="v" id="rule-evening">Same dinner, split at the plate — <b>no starchy carb for you</b>, his side stays on</div></div>
+    <div class="rule-card"><div class="k">Your diet</div><div class="v" id="rule-diet-you"><b>Gluten-free</b> throughout — check labels on stock, mustard, oats, bread</div></div>
+    <div class="rule-card"><div class="k">His diet</div><div class="v" id="rule-diet-him"><b>Dairy-free except butter</b> — feta, yogurt &amp; cream are swapped or left off his plate</div></div>
     <div class="rule-card"><div class="k">The pool</div><div class="v">Tap <b>Choose meal</b> on any slot to browse the whole pool by cuisine or main ingredient</div></div>
     <div class="rule-card"><div class="k">Shopping</div><div class="v">Rebuilt live from whatever's currently planned, with one-tap <b>Ocado</b> search links</div></div>
   </div>
+
+  <p class="profile-hint">Want your own version — different calories, ingredients to avoid, favourite cuisines? Add <code>?p=yourname</code> to this page's address (e.g. <code>?p=sarah</code>) and bookmark that link — it's yours alone, separate from the plan above.</p>
 
   <nav class="tabs" id="tabs">
     <button data-tab="plan" class="active">Planner</button>
