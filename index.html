@@ -17,7 +17,10 @@
       <h1>Two Plates, One Table</h1>
       <p class="lede">Pick meals from the pool below, and the shopping list rebuilds itself. Gluten-free throughout for you; dairy-free (butter excepted) noted wherever it applies to his plate.</p>
     </div>
-    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">🖥 Auto</button>
+    <div style="display:flex;gap:8px;align-self:flex-start;">
+      <button class="theme-toggle" id="household-setup-btn">⚙ Household setup</button>
+      <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">🖥 Auto</button>
+    </div>
   </header>
 
   <div class="rules">
@@ -36,6 +39,7 @@
     <button data-tab="recipes">Recipes</button>
     <button data-tab="shopping">Shopping List</button>
     <button data-tab="pantry">Pantry &amp; Flavour</button>
+    <button data-tab="myrecipes">My Recipes</button>
   </nav>
 
   <div class="sync-note" id="sync-note"></div>
@@ -72,6 +76,62 @@
       <b>Dairy-free except butter (him):</b> feta, yogurt-based sauces, cream and hard cheese are swapped to a dairy-free alternative or simply left off his plate in the recipes — butter, ghee and olive oil are all fine for him.
     </div>
     <div class="pantry-grid" id="pantry-root"></div>
+  </section>
+
+  <section class="panel" id="panel-myrecipes">
+    <div class="callout">
+      <h4>Add your own recipe</h4>
+      Got something you already cook that isn't in the pool? Add it here and it'll show up in "Choose meal", the Recipes tab and the shopping list, right alongside the built-in dishes. One ingredient per line, one method step per line.
+    </div>
+    <div class="recipe-form">
+      <label>Title<input id="cr-title" type="text" placeholder="e.g. My chicken traybake"></label>
+      <div class="pf-row">
+        <label>Meal type
+          <select id="cr-category">
+            <option value="breakfast">Breakfast</option>
+            <option value="brunch">Brunch</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner" selected>Dinner</option>
+          </select>
+        </label>
+        <label>Batch or fresh
+          <select id="cr-batch">
+            <option value="fresh" selected>Cook fresh</option>
+            <option value="batch">Batch &amp; freeze</option>
+          </select>
+        </label>
+      </div>
+      <div class="pf-row">
+        <label>Cuisine <span class="pf-hint">(optional)</span><input id="cr-cuisine" type="text" placeholder="e.g. Everyday"></label>
+        <label>Main ingredient <span class="pf-hint">(optional)</span><input id="cr-ingredient" type="text" placeholder="e.g. Chicken"></label>
+      </div>
+      <label>Calories <span class="pf-hint">(per portion, your best estimate)</span><input id="cr-kcal" type="number" min="0" max="2000"></label>
+      <div class="pf-row">
+        <label><input id="cr-veg" type="checkbox"> Vegetarian</label>
+        <label><input id="cr-df" type="checkbox"> Dairy-free</label>
+        <label><input id="cr-gf" type="checkbox"> Gluten-free</label>
+      </div>
+      <label>Contains any of these allergens? <span class="pf-hint">(so it's correctly hidden by anyone avoiding them)</span></label>
+      <div class="pf-allergen-grid" id="panel-myrecipes-allergens">
+        <label class="pf-allergen"><input type="checkbox" data-allergen="egg"> Egg</label>
+        <label class="pf-allergen"><input type="checkbox" data-allergen="fish"> Fish</label>
+        <label class="pf-allergen"><input type="checkbox" data-allergen="shellfish"> Shellfish</label>
+        <label class="pf-allergen"><input type="checkbox" data-allergen="treenut"> Tree nuts</label>
+        <label class="pf-allergen"><input type="checkbox" data-allergen="peanut"> Peanuts</label>
+        <label class="pf-allergen"><input type="checkbox" data-allergen="soy"> Soy</label>
+        <label class="pf-allergen"><input type="checkbox" data-allergen="sesame"> Sesame</label>
+        <label class="pf-allergen"><input type="checkbox" data-allergen="mustard"> Mustard</label>
+      </div>
+      <label>Ingredients <span class="pf-hint">(one per line)</span>
+        <textarea id="cr-ingredients-list" rows="5" placeholder="200g chicken breast&#10;1 tbsp olive oil&#10;1 lemon, juiced"></textarea></label>
+      <label>Method <span class="pf-hint">(one step per line)</span>
+        <textarea id="cr-method" rows="5" placeholder="Season the chicken and roast at 200°C for 25 minutes.&#10;Rest 5 minutes, then serve."></textarea></label>
+      <label>Tastes better with <span class="pf-hint">(optional tip)</span><input id="cr-tip" type="text"></label>
+      <label>Carb side to add for shared dinners <span class="pf-hint">(optional — only used for dinners)</span><input id="cr-hisadd" type="text" placeholder="e.g. 150g rice"></label>
+      <button class="pf-save" onclick="addCustomRecipe()">Save recipe</button>
+    </div>
+    <h4 style="margin:24px 0 10px;font-family:'Fraunces',serif;font-size:15px;">Your added recipes</h4>
+    <div id="my-recipes-list"></div>
   </section>
 
   <footer>
